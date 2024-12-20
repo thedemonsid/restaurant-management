@@ -5,8 +5,9 @@
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
+    "dev": "pnpm run \"/^dev:.*/\"",
     "dev:react": "vite",
-    "dev:electron": "cross-env NODE_ENV=developement electron .",
+    "dev:electron": "pnpm transpile:electron && cross-env NODE_ENV=developement electron .",
     "build:react": "tsc -b && vite build",
     "lint": "eslint .",
     "transpile:electron": "tsc --project src/electron/tsconfig.json",
