@@ -4,4 +4,4 @@ electron.contextBridge.exposeInMainWorld("electron", {
   test: () => {
     console.log("Hello from preload");
   },
-});
+}) satisfies Window["electron"];

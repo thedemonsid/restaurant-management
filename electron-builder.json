@@ -1,6 +1,7 @@
 {
   "appId": "com.the_demon_sid.samrudhi",
   "files": ["dist-electron", "dist-react"],
+  "extraResources":["dist-electron/preload.cjs"],
   "icon": "./Designer.png",
   "mac": {
     "target": "dmg"
