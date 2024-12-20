@@ -11,6 +11,9 @@ Managing a restaurant involves juggling multiple tasks, from taking orders,creat
 - [x] The Restaurant Management System - Samrudhi was developed to address these challenges. 
 - [x] It aims to **streamline operations, reduce manual errors, and enhance the dining experience**, providing a practical solution to real-world problems faced by my family and other restaurant owners.
 
+## Why not use an existing solution?
+- [x] Existing solutions are  **expensive** and **complex**, making them unsuitable for my needs.
+- [x] They do not offer the **customization** and **flexibility** required to meet the unique needs of my family's restaurant. 
 
 ## Quick Start
 1. Clone the repository:
