@@ -1,50 +1,41 @@
-# React + TypeScript + Vite
+# Restaurant Management System - Samrudhi
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
+A comprehensive restaurant management system designed to streamline operations, enhance customer experience, and optimize resource management.
 
-Currently, two official plugins are available:
+## Why?
+Managing a restaurant involves juggling multiple tasks, from taking orders,creating bills to managing inventory. This project aims to simplify these tasks by providing an integrated solution that addresses common challenges faced by restaurant managers.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [x] As a **member of a family that recently started a restaurant**, I have firsthand experience with the challenges of managing daily operations. 
+- [x] Tasks like **taking orders, creating bills, managing inventory, and ensuring customer satisfaction** can be overwhelming. 
+- [x] The Restaurant Management System - Samrudhi was developed to address these challenges. 
+- [x] It aims to **streamline operations, reduce manual errors, and enhance the dining experience**, providing a practical solution to real-world problems faced by my family and other restaurant owners.
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Quick Start
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/restaurant-management-samrudhi.git
+   ```
+2. Install dependencies:
+   ```sh
+   pnpm install
+   ```
+3. Start the development server:
+   ```sh
+   pnpm run dev
+   ```
 
-- Configure the top-level `parserOptions` property like this:
+## Usage
+- **Development**: Run `pnpm run dev` to start the development server.
+- **Build**: Run 
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+pnpm run build
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+ to build the project for production.
+- **Lint**: Run `pnpm run lint` to lint the codebase.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Contributing
+Contributions are welcome! Please fork the repository and submit a pull request.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+For more details, refer to the CONTRIBUTING.md file.
