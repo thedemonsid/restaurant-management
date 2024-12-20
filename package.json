@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "pnpm run \"/^dev:.*/\"",
     "dev:react": "vite",
-    "dev:electron": "pnpm transpile:electron && cross-env NODE_ENV=developement electron .",
+    "dev:electron": "pnpm transpile:electron ; cross-env NODE_ENV=development electron .",
     "build:react": "tsc -b && vite build",
     "lint": "eslint .",
     "transpile:electron": "tsc --project src/electron/tsconfig.json",
