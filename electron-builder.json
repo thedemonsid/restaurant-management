@@ -1,7 +1,14 @@
 {
   "appId": "com.the_demon_sid.samrudhi",
   "files": ["dist-electron", "dist-react"],
-  "extraResources": ["dist-electron/preload.cjs", "src/assets/**"],
+  "extraResources": [
+    "dist-electron/preload.cjs",
+    "src/assets/**",
+    {
+      "from": "src/electron/database/restaurant.db",
+      "to": "database/restaurant.db"
+    }
+  ],
   "icon": "./src/assets/react.svg",
   "mac": {
     "target": "dmg"
