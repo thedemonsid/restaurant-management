@@ -1,19 +1,20 @@
 export interface MenuItem {
   id: number;
-  category_id: number;
   name: string;
   price: number;
-  description?: string;
-  is_available: boolean;
-  created_at: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface Category {
+export interface Order {
   id: number;
-  name: string;
-  created_at: string;
+  tableName?: string;
+  isParcel: boolean;
+  amountPaid: number;
+  paymentMethod: string;
+  createdAt: string;
+  updatedAt: string;
 }
-
 export interface DatabaseError extends Error {
   code?: string;
 }

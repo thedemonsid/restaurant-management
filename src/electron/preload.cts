@@ -1,10 +1,17 @@
-const electron = require("electron");
-import type { MenuItem } from "./database/types.ts" assert { "resolution-mode": "import" };
+const { contextBridge, ipcRenderer } = require("electron");
 
-electron.contextBridge.exposeInMainWorld("restaurant", {
+contextBridge.exposeInMainWorld("restaurant", {
   menu: {
-    getItems: () => electron.ipcRenderer.invoke("get-menu-items"),
-    addItem: (item: Omit<MenuItem, "id" | "created_at" | "is_available">) =>
-      electron.ipcRenderer.invoke("add-menu-item", item),
+    addItem: (item: any) => ipcRenderer.invoke("menu:add-item", item),
+    getItems: (): Promise<any> => ipcRenderer.invoke("menu:get-items"),
+    deleteMenuItem: (id: number) => ipcRenderer.invoke("menu:remove-item", id),
+    updateMenuItem: (item: any) => ipcRenderer.invoke("menu:update-item", item),
+  },
+  order: {
+    addOrder: (order: any, orderedItems: any) =>
+      ipcRenderer.invoke("order:add-order", order, orderedItems),
+    getOrders: (): Promise<any> => ipcRenderer.invoke("order:get-orders"),
+    getOrderItems: (orderId: string): Promise<any> =>
+      ipcRenderer.invoke("order:get-order-items", orderId),
   },
 });

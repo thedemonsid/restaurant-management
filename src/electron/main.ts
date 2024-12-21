@@ -1,19 +1,12 @@
-import { app, BrowserWindow, Menu, Tray,ipcMain } from "electron";
+import { app, BrowserWindow, Menu, Tray, ipcMain } from "electron";
 import path from "path";
 import { isDev } from "./utils.js";
 import { getAssetPath, resolvePath } from "./pathResolver.js";
 import db from "./database/index.js";
-// Add IPC handlers
-ipcMain.handle('get-menu-items', async () => {
-  return db.getMenuItems();
-});
-
-ipcMain.handle('add-menu-item', async (_, item) => {
-  return db.addMenuItem(item);
-});
+import "./ipcHandlers.js";
 
 // Clean up on app quit
-app.on('before-quit', () => {
+app.on("before-quit", () => {
   db.close();
 });
 app.on("ready", () => {
