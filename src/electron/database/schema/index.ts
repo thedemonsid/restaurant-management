@@ -17,14 +17,44 @@ export const schema = `
     "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
   );
 
-  CREATE TABLE IF NOT EXISTS "_MenuItemToOrder" (
-    "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL,
-    CONSTRAINT "_MenuItemToOrder_A_fkey" FOREIGN KEY ("A") REFERENCES "MenuItem" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT "_MenuItemToOrder_B_fkey" FOREIGN KEY ("B") REFERENCES "Order" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+-- Join table to link MenuItems and Orders
+  CREATE TABLE IF NOT EXISTS "OrderMenuItem" (
+    "order_id" INTEGER NOT NULL,
+    "menu_item_id" INTEGER NOT NULL,
+    CONSTRAINT "OrderMenuItem_order_id_fkey" FOREIGN KEY ("order_id") REFERENCES "Order" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "OrderMenuItem_menu_item_id_fkey" FOREIGN KEY ("menu_item_id") REFERENCES "MenuItem" ("id") ON DELETE CASCADE ON UPDATE CASCADE
   );
 
-  CREATE UNIQUE INDEX IF NOT EXISTS "MenuItem_name_key" ON "MenuItem"("name");
-  CREATE UNIQUE INDEX IF NOT EXISTS "_MenuItemToOrder_AB_unique" ON "_MenuItemToOrder"("A", "B");
-  CREATE INDEX IF NOT EXISTS "_MenuItemToOrder_B_index" ON "_MenuItemToOrder"("B");
+  -- Unique index to ensure each MenuItem can only be linked once per Order
+  CREATE UNIQUE INDEX IF NOT EXISTS "OrderMenuItem_order_menu_item_unique" ON "OrderMenuItem"("order_id", "menu_item_id");
+
+  -- Index to speed up lookups by order_id
+  CREATE INDEX IF NOT EXISTS "OrderMenuItem_order_id_index" ON "OrderMenuItem"("order_id");
+
+  -- Index to speed up lookups by menu_item_id
+  CREATE INDEX IF NOT EXISTS "OrderMenuItem_menu_item_id_index" ON "OrderMenuItem"("menu_item_id");
 `;
+
+//! model MenuItem {
+//!   id        Int      @id @default(autoincrement())
+//!   name      String   @unique
+//!   price     Float
+//!   createdAt DateTime @default(now())
+//!   updatedAt DateTime @updatedAt
+//!   orders    Order[]
+//! }
+
+//!  model Order {
+//!  id Int @id @default(autoincrement())
+
+//!  tableName String?
+//!  isParcel  Boolean
+
+//!  amountPaid    Float  @default(0)
+//!  paymentMethod String
+
+//!  createdAt DateTime @default(now())
+//!  updatedAt DateTime @updatedAt
+
+//!   items MenuItem[]
+//! }

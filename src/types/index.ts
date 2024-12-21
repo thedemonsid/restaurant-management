@@ -1,8 +1,7 @@
 export type TableStatus = "occupied" | "available" | "reserved";
 
 export interface Table {
-  id: number;
-  seats: number;
+  name: String;
   status: TableStatus;
 }
 
