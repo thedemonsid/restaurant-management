@@ -10,9 +10,9 @@ export const schema = `
   CREATE TABLE IF NOT EXISTS "Order" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "tableName" TEXT,
-    "isParcel" BOOLEAN NOT NULL DEFAULT 0,
-    "amountPaid" REAL NOT NULL DEFAULT 0,
-    "paymentMethod" TEXT NOT NULL,
+    "isParcel" BOOLEAN NOT NULL DEFAULT FALSE,
+    "amountPaid" REAL NOT NULL DEFAULT 0.0,
+    "paymentMethod" TEXT NOT NULL CHECK ("paymentMethod" IN ('cash', 'card', 'online')),
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
   );
