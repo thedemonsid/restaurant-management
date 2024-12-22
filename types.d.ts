@@ -9,7 +9,7 @@ interface Window {
     order: {
       addOrder: (order: any, orderedItems: any) => Promise<void>;
       getOrders: () => Promise<any>;
-      getOrderItems: (orderId: string) => Promise<any>;
+      getOrderItems: (orderId: number) => Promise<any>;
     };
   };
 }

@@ -45,7 +45,7 @@ ipcMain.handle(
     order: Omit<Order, "id" | "createdAt" | "updatedAt">,
     orderedItems: { menu_item_id: number; quantity: number }[]
   ) => {
-    console.log("order:add-order", order, orderedItems);
+    // console.log("order:add-order", order, orderedItems);
     try {
 
       return await RestaurantDB.addOrder(order, orderedItems);

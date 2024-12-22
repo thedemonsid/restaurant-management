@@ -12,8 +12,8 @@ export function addOrder(
   `);
 
   const orderItemsStmt = db.prepare(`
-    INSERT INTO "OrderMenuItem" (order_id, menu_item_id)
-    VALUES (@order_id, @menu_item_id)
+    INSERT INTO "OrderMenuItem" (order_id, menu_item_id, quantity)
+    VALUES (@order_id, @menu_item_id, @quantity)
   `);
 
   const transaction = db.transaction(() => {
@@ -30,6 +30,7 @@ export function addOrder(
       orderItemsStmt.run({
         order_id: orderId,
         menu_item_id: item.menu_item_id,
+        quantity: item.quantity,
       });
     });
   });

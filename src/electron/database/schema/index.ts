@@ -21,6 +21,7 @@ export const schema = `
   CREATE TABLE IF NOT EXISTS "OrderMenuItem" (
     "order_id" INTEGER NOT NULL,
     "menu_item_id" INTEGER NOT NULL,
+    "quantity" INTEGER NOT NULL DEFAULT 1,
     CONSTRAINT "OrderMenuItem_order_id_fkey" FOREIGN KEY ("order_id") REFERENCES "Order" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "OrderMenuItem_menu_item_id_fkey" FOREIGN KEY ("menu_item_id") REFERENCES "MenuItem" ("id") ON DELETE CASCADE ON UPDATE CASCADE
   );
