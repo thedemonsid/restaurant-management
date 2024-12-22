@@ -135,7 +135,10 @@ const TableManager: React.FC<TableManagerProps> = ({
           <Label htmlFor="status" className="text-right">
             Status
           </Label>
-          <Select defaultValue={table.status}>
+          <Select
+            defaultValue={table.status}
+            onValueChange={handleStatusChange}
+          >
             <SelectTrigger className="col-span-3">
               <SelectValue placeholder="Select status" />
             </SelectTrigger>

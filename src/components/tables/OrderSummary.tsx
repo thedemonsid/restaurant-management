@@ -125,7 +125,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="cash">Cash</SelectItem>
-              <SelectItem value="upi">UPI / Online</SelectItem>
+              <SelectItem value="online">UPI / Online</SelectItem>
             </SelectContent>
           </Select>
           <DialogFooter>
