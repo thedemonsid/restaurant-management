@@ -12,8 +12,8 @@ export function addOrder(
   `);
 
   const orderItemsStmt = db.prepare(`
-    INSERT INTO "_MenuItemToOrder" (A, B)
-    VALUES (@menu_item_id, @order_id)
+    INSERT INTO "OrderMenuItem" (order_id, menu_item_id)
+    VALUES (@order_id, @menu_item_id)
   `);
 
   const transaction = db.transaction(() => {
@@ -28,13 +28,14 @@ export function addOrder(
 
     orderedItems.forEach((item) => {
       orderItemsStmt.run({
-        menu_item_id: item.menu_item_id,
         order_id: orderId,
+        menu_item_id: item.menu_item_id,
       });
     });
   });
 
   transaction();
+  return true;
 }
 
 export function getOrders(db: DatabaseType) {
@@ -47,9 +48,9 @@ export function getOrders(db: DatabaseType) {
 export function getOrderItems(db: DatabaseType, orderId: number) {
   const stmt = db.prepare(`
     SELECT oi.*, mi.name, mi.price
-    FROM "_MenuItemToOrder" oi
-    JOIN "MenuItem" mi ON oi.A = mi.id
-    WHERE oi.B = @order_id
+    FROM "OrderMenuItem" oi
+    JOIN "MenuItem" mi ON oi.menu_item_id = mi.id
+    WHERE oi.order_id = @order_id
   `);
   return stmt.all({ order_id: orderId });
 }

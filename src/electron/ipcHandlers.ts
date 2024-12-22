@@ -1,5 +1,6 @@
 import { ipcMain } from "electron";
 import RestaurantDB from "./database/index.js";
+import { Order } from "./database/types.js";
 
 ipcMain.handle("menu:add-item", async (event, item) => {
   try {
@@ -37,14 +38,23 @@ ipcMain.handle("menu:update-item", async (event, item) => {
   }
 });
 
-ipcMain.handle("order:add-order", async (event, order, orderedItems) => {
-  try {
-    return await RestaurantDB.addOrder(order, orderedItems);
-  } catch (error) {
-    console.error("Failed to add order:", error);
-    throw error;
+ipcMain.handle(
+  "order:add-order",
+  async (
+    event,
+    order: Omit<Order, "id" | "createdAt" | "updatedAt">,
+    orderedItems: { menu_item_id: number; quantity: number }[]
+  ) => {
+    console.log("order:add-order", order, orderedItems);
+    try {
+
+      return await RestaurantDB.addOrder(order, orderedItems);
+    } catch (error) {
+      console.error("Failed to add order:", error);
+      throw error;
+    }
   }
-});
+);
 
 ipcMain.handle("order:get-orders", async () => {
   try {

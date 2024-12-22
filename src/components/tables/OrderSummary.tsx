@@ -23,7 +23,7 @@ interface OrderSummaryProps {
   order: OrderItem[];
   handleAddItem: (item: MenuItem) => void;
   handleRemoveItem: (itemId: number) => void;
-  handleOrderSubmit: () => void;
+  handleOrderSubmit: ({ amountPaid, paymentMethod }: any) => void;
   totalOrderPrice: number;
   tableName: String;
 }
@@ -39,13 +39,10 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   const [paymentMethod, setPaymentMethod] = useState("");
 
   const handleSaveOrder = () => {
-    // Logic to save the order
-    console.log("Order saved");
-    handleOrderSubmit();
+    handleOrderSubmit({ amountPaid: totalOrderPrice, paymentMethod });
   };
 
   const handlePrintOrder = () => {
-    // Logic to print the order
     console.log("Order printed");
 
     handleSaveOrder();

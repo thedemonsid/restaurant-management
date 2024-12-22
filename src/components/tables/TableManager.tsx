@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Search, Plus } from "lucide-react";
-import { Table, MenuItem, OrderItem } from "@/types/index";
+import { Table, MenuItem } from "@/types/index";
 import OrderSummary from "@/components/tables/OrderSummary";
 
 interface TableManagerProps {
@@ -39,15 +39,36 @@ const TableManager: React.FC<TableManagerProps> = ({
     }
     fetchMenuItems();
   }, []);
-  const handleOrderSubmit = () => {
+
+  const handleOrderSubmit = async ({
+    amountPaid,
+    paymentMethod,
+  }: {
+    amountPaid: number;
+    paymentMethod: string;
+  }) => {
+    const createdOrder = await window.restaurant.order.addOrder(
+      {
+        tableName: table.name,
+        isParcel: 0,
+        amountPaid: amountPaid,
+        paymentMethod: paymentMethod,
+      },
+      table.order.map((orderItem) => ({
+        menu_item_id: orderItem.menuItem.id,
+        quantity: orderItem.quantity,
+      }))
+    );
+    alert(`Order submitted successfully! ${createdOrder}`);
     const updatedTables = tables.map((t) =>
       t.name === table.name
         ? { ...t, order: [], status: "available" as Table["status"] }
         : t
     );
-    
+
     setTables(updatedTables);
   };
+
   const handleAddItem = (item: MenuItem) => {
     const updatedTables = tables.map((t) => {
       if (t.name === table.name) {
@@ -87,12 +108,14 @@ const TableManager: React.FC<TableManagerProps> = ({
     });
     setTables(updatedTables);
   };
+
   const handleStatusChange = (value: Table["status"]) => {
     const updatedTables = tables.map((t) =>
       t.name === table.name ? { ...t, status: value } : t
     );
     setTables(updatedTables);
   };
+
   const filteredMenuItems = menuItems.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -105,22 +128,14 @@ const TableManager: React.FC<TableManagerProps> = ({
   return (
     <SheetContent side="right" className="w-[400px] sm:w-[540px]">
       <SheetHeader>
-        <SheetTitle>
-          Manage Table{" "}
-          <span className="text-red-600 shadow-sm text-xl ml-3 bg-green-300 p-2 rounded-lg">
-            {table.name}
-          </span>
-        </SheetTitle>
+        <SheetTitle>Manage Table {table.name}</SheetTitle>
       </SheetHeader>
       <div className="grid gap-4 py-4">
         <div className="grid grid-cols-4 items-center gap-4">
           <Label htmlFor="status" className="text-right">
             Status
           </Label>
-          <Select
-            defaultValue={table.status}
-            onValueChange={handleStatusChange}
-          >
+          <Select defaultValue={table.status}>
             <SelectTrigger className="col-span-3">
               <SelectValue placeholder="Select status" />
             </SelectTrigger>
@@ -163,13 +178,13 @@ const TableManager: React.FC<TableManagerProps> = ({
           ))}
         </div>
       </div>
-      {table.order.length > 0 && (
+      {Object.keys(table.order).length > 0 && (
         <OrderSummary
           order={table.order}
-          tableName={table.name}
           handleAddItem={handleAddItem}
           handleRemoveItem={handleRemoveItem}
           totalOrderPrice={totalOrderPrice}
+          tableName={table.name}
           handleOrderSubmit={handleOrderSubmit}
         />
       )}
