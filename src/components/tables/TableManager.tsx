@@ -40,12 +40,14 @@ const TableManager: React.FC<TableManagerProps> = ({
     fetchMenuItems();
   }, []);
   const handleOrderSubmit = () => {
-      const updatedTables = tables.map((t) =>
-        t.name === table.name ? { ...t, order: [], status: "available" as Table["status"] } : t
-      );
-      setTables(updatedTables);
-      // localStorage.setItem("tables", JSON.stringify(updatedTables));
-    };
+    const updatedTables = tables.map((t) =>
+      t.name === table.name
+        ? { ...t, order: [], status: "available" as Table["status"] }
+        : t
+    );
+    setTables(updatedTables);
+    // localStorage.setItem("tables", JSON.stringify(updatedTables));
+  };
   const handleAddItem = (item: MenuItem) => {
     const updatedTables = tables.map((t) => {
       if (t.name === table.name) {
@@ -88,12 +90,12 @@ const TableManager: React.FC<TableManagerProps> = ({
     // localStorage.setItem("tables", JSON.stringify(updatedTables));
   };
   const handleStatusChange = (value: Table["status"]) => {
-      const updatedTables = tables.map((t) =>
-        t.name === table.name ? { ...t, status: value } : t
-      );
-      setTables(updatedTables);
-      // localStorage.setItem("tables", JSON.stringify(updatedTables));
-    };
+    const updatedTables = tables.map((t) =>
+      t.name === table.name ? { ...t, status: value } : t
+    );
+    setTables(updatedTables);
+    // localStorage.setItem("tables", JSON.stringify(updatedTables));
+  };
   const filteredMenuItems = menuItems.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -106,7 +108,9 @@ const TableManager: React.FC<TableManagerProps> = ({
   return (
     <SheetContent side="right" className="w-[400px] sm:w-[540px]">
       <SheetHeader>
-        <SheetTitle>Manage Table {table.name}</SheetTitle>
+        <SheetTitle>
+          Manage Table <span className="text-red-600 shadow-sm text-xl ml-3 bg-green-300 p-2 rounded-lg">{table.name}</span>
+        </SheetTitle>
       </SheetHeader>
       <div className="grid gap-4 py-4">
         <div className="grid grid-cols-4 items-center gap-4">

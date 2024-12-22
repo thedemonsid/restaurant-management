@@ -28,7 +28,7 @@ const TableCard: React.FC<TableCardProps> = ({
     >
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">
-          Table {table.name}
+         <span> Table </span><span className="text-red-600 shadow-sm text-xl ml-3 bg-green-300 p-2 rounded-lg">{table.name}</span>
         </CardTitle>
         <div
           className={`px-2 py-1 rounded-full text-xs ${
