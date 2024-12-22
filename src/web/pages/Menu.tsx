@@ -19,13 +19,19 @@ const Menu = () => {
 
   useEffect(() => {
     const filterMenuItems = () => {
-      const filtered = menuItems.filter((item) =>
-        item.name.toLowerCase().includes(newItem.name.toLowerCase())
-      );
+      const filtered = menuItems.filter((item) => {
+        const nameMatch = newItem.name
+          ? item.name.toLowerCase().includes(newItem.name.toLowerCase())
+          : true;
+        const priceMatch = newItem.price
+          ? item.price.toString().includes(newItem.price)
+          : true;
+        return nameMatch && priceMatch;
+      });
       setFilteredItems(filtered);
     };
     filterMenuItems();
-  }, [newItem.name, menuItems]);
+  }, [newItem.name, newItem.price, menuItems]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,8 +42,6 @@ const Menu = () => {
     e.preventDefault();
     const item = { name: newItem.name, price: parseFloat(newItem.price) };
     const addedItem = await window.restaurant.menu.addItem(item);
-    //@ts-ignore
-    alert(`Menu item added successfully!  , ${addedItem.name}`);
     //@ts-ignore
     setMenuItems([...menuItems, addedItem]);
     setNewItem({ name: "", price: "" });

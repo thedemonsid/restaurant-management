@@ -23,6 +23,7 @@ const TableCard: React.FC<TableCardProps> = ({
       key={table.name as React.Key}
       className={cn(
         table.status === "occupied" && "bg-green-100",
+        table.status === "reserved" && "bg-yellow-100",
         "min-w-28 min-h-28 max-w-56 max-h-40 mb-2"
       )}
     >
