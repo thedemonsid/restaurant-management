@@ -10,10 +10,15 @@ export function addMenuItem(
     VALUES (@name, @price)
   `);
 
-  return stmt.run({
+  stmt.run({
     name: item.name,
     price: item.price,
   });
+  const response: Omit<MenuItem, "id" | "createdAt" | "updatedAt"> = {
+    name: item.name,
+    price: item.price,
+  };
+  return response;
 }
 
 export function getMenuItems(db: DatabaseType) {
