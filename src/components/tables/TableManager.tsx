@@ -45,8 +45,8 @@ const TableManager: React.FC<TableManagerProps> = ({
         ? { ...t, order: [], status: "available" as Table["status"] }
         : t
     );
+    
     setTables(updatedTables);
-    // localStorage.setItem("tables", JSON.stringify(updatedTables));
   };
   const handleAddItem = (item: MenuItem) => {
     const updatedTables = tables.map((t) => {
@@ -69,7 +69,6 @@ const TableManager: React.FC<TableManagerProps> = ({
       return t;
     });
     setTables(updatedTables);
-    // localStorage.setItem("tables", JSON.stringify(updatedTables));
   };
 
   const handleRemoveItem = (itemId: number) => {
@@ -87,14 +86,12 @@ const TableManager: React.FC<TableManagerProps> = ({
       return t;
     });
     setTables(updatedTables);
-    // localStorage.setItem("tables", JSON.stringify(updatedTables));
   };
   const handleStatusChange = (value: Table["status"]) => {
     const updatedTables = tables.map((t) =>
       t.name === table.name ? { ...t, status: value } : t
     );
     setTables(updatedTables);
-    // localStorage.setItem("tables", JSON.stringify(updatedTables));
   };
   const filteredMenuItems = menuItems.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -109,7 +106,10 @@ const TableManager: React.FC<TableManagerProps> = ({
     <SheetContent side="right" className="w-[400px] sm:w-[540px]">
       <SheetHeader>
         <SheetTitle>
-          Manage Table <span className="text-red-600 shadow-sm text-xl ml-3 bg-green-300 p-2 rounded-lg">{table.name}</span>
+          Manage Table{" "}
+          <span className="text-red-600 shadow-sm text-xl ml-3 bg-green-300 p-2 rounded-lg">
+            {table.name}
+          </span>
         </SheetTitle>
       </SheetHeader>
       <div className="grid gap-4 py-4">
@@ -166,7 +166,7 @@ const TableManager: React.FC<TableManagerProps> = ({
       {table.order.length > 0 && (
         <OrderSummary
           order={table.order}
-          menuItems={menuItems}
+          tableName={table.name}
           handleAddItem={handleAddItem}
           handleRemoveItem={handleRemoveItem}
           totalOrderPrice={totalOrderPrice}
