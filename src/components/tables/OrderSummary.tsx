@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
-import { MenuItem } from "@/types/index";
+import { MenuItem, OrderItem } from "@/types/index";
 
 interface OrderSummaryProps {
-  order: { [key: string]: number };
+  order: OrderItem[];
   menuItems: MenuItem[];
   handleAddItem: (item: MenuItem) => void;
-  handleRemoveItem: (itemName: string) => void;
+  handleRemoveItem: (itemId: number) => void;
   totalOrderPrice: number;
 }
 
@@ -20,19 +20,26 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   return (
     <div className="mt-4">
       <h4 className="font-medium">Current Order</h4>
-      {Object.entries(order).map(([itemName, quantity]) => (
-        <div key={itemName} className="flex justify-between items-center py-1">
-          <span>OrderSummary
-            {itemName} (x{quantity})
+      {order.map((orderItem) => (
+        <div
+          key={orderItem.menuItem.id}
+          className="flex justify-between items-center py-1"
+        >
+          <span>
+            {orderItem.menuItem.name} (x{orderItem.quantity})
           </span>
           <div>
-            <Button size="sm" variant="outline" onClick={() => handleRemoveItem(itemName)}>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => handleRemoveItem(orderItem.menuItem.id)}
+            >
               <Minus className="w-4 h-4" />
             </Button>
             <Button
               size="sm"
               className="ml-2"
-              onClick={() => handleAddItem(menuItems.find((item) => item.name === itemName)!)}
+              onClick={() => handleAddItem(orderItem.menuItem)}
             >
               <Plus className="w-4 h-4" />
             </Button>

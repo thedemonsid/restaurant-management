@@ -11,15 +11,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Search, Plus } from "lucide-react";
-import { Table, MenuItem } from "@/types/index";
+import { Table, MenuItem, OrderItem } from "@/types/index";
 import OrderSummary from "@/components/tables/OrderSummary";
 
 interface TableManagerProps {
   table: Table;
+  tables: Table[];
+  setTables: (tables: Table[]) => void;
 }
 
-const TableManager: React.FC<TableManagerProps> = ({ table }) => {
-  const [order, setOrder] = useState<{ [key: string]: number }>({});
+const TableManager: React.FC<TableManagerProps> = ({
+  table,
+  tables,
+  setTables,
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 
@@ -33,32 +38,64 @@ const TableManager: React.FC<TableManagerProps> = ({ table }) => {
       setMenuItems(menuItems);
     }
     fetchMenuItems();
-  });
+  }, []);
+
   const handleAddItem = (item: MenuItem) => {
-    setOrder((prev) => ({ ...prev, [item.name]: (prev[item.name] || 0) + 1 }));
-  };
-
-  const handleRemoveItem = (itemName: string) => {
-    setOrder((prev) => {
-      const newOrder = { ...prev };
-      if (newOrder[itemName] > 1) {
-        newOrder[itemName]--;
-      } else {
-        delete newOrder[itemName];
+    const updatedTables = tables.map((t) => {
+      if (t.name === table.name) {
+        const existingOrderItem = t.order.find(
+          (orderItem) => orderItem.menuItem.id === item.id
+        );
+        let newOrder;
+        if (existingOrderItem) {
+          newOrder = t.order.map((orderItem) =>
+            orderItem.menuItem.id === item.id
+              ? { ...orderItem, quantity: orderItem.quantity + 1 }
+              : orderItem
+          );
+        } else {
+          newOrder = [...t.order, { menuItem: item, quantity: 1 }];
+        }
+        return { ...t, order: newOrder };
       }
-      return newOrder;
+      return t;
     });
+    setTables(updatedTables);
+    // localStorage.setItem("tables", JSON.stringify(updatedTables));
   };
 
+  const handleRemoveItem = (itemId: number) => {
+    const updatedTables = tables.map((t) => {
+      if (t.name === table.name) {
+        const newOrder = t.order
+          .map((orderItem) =>
+            orderItem.menuItem.id === itemId
+              ? { ...orderItem, quantity: orderItem.quantity - 1 }
+              : orderItem
+          )
+          .filter((orderItem) => orderItem.quantity > 0);
+        return { ...t, order: newOrder };
+      }
+      return t;
+    });
+    setTables(updatedTables);
+    // localStorage.setItem("tables", JSON.stringify(updatedTables));
+  };
+  const handleStatusChange = (value: string) => {
+    const updatedTables = tables.map((t) =>
+      t.name === table.name
+        ? { ...t, status: value as Table["status"] }
+        : t
+    );
+    setTables(updatedTables);
+    // localStorage.setItem("tables", JSON.stringify(updatedTables));
+  };
   const filteredMenuItems = menuItems.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalOrderPrice = Object.entries(order).reduce(
-    (total, [itemName, quantity]) => {
-      const item = menuItems.find((i) => i.name === itemName);
-      return total + (item ? item.price * quantity : 0);
-    },
+  const totalOrderPrice = table.order.reduce(
+    (total, orderItem) => total + orderItem.menuItem.price * orderItem.quantity,
     0
   );
 
@@ -72,7 +109,10 @@ const TableManager: React.FC<TableManagerProps> = ({ table }) => {
           <Label htmlFor="status" className="text-right">
             Status
           </Label>
-          <Select defaultValue={table.status}>
+          <Select
+            defaultValue={table.status}
+            onValueChange={handleStatusChange}
+          >
             <SelectTrigger className="col-span-3">
               <SelectValue placeholder="Select status" />
             </SelectTrigger>
@@ -102,7 +142,7 @@ const TableManager: React.FC<TableManagerProps> = ({ table }) => {
         <div className="h-[200px] overflow-y-auto">
           {filteredMenuItems.map((item) => (
             <div
-              key={item.name}
+              key={item.id}
               className="flex justify-between items-center py-2"
             >
               <span>
@@ -115,9 +155,9 @@ const TableManager: React.FC<TableManagerProps> = ({ table }) => {
           ))}
         </div>
       </div>
-      {Object.keys(order).length > 0 && (
+      {table.order.length > 0 && (
         <OrderSummary
-          order={order}
+          order={table.order}
           menuItems={menuItems}
           handleAddItem={handleAddItem}
           handleRemoveItem={handleRemoveItem}

@@ -8,9 +8,16 @@ import TableManager from "@/components/tables/TableManager";
 interface TableCardProps {
   table: Table;
   setSelectedTable: (table: Table) => void;
+  setTables: (tables: Table[]) => void;
+  tables: Table[];
 }
 
-const TableCard: React.FC<TableCardProps> = ({ table, setSelectedTable }) => {
+const TableCard: React.FC<TableCardProps> = ({
+  table,
+  setSelectedTable,
+  setTables,
+  tables,
+}) => {
   return (
     <Card
       key={table.name as React.Key}
@@ -20,7 +27,9 @@ const TableCard: React.FC<TableCardProps> = ({ table, setSelectedTable }) => {
       )}
     >
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Table {table.name}</CardTitle>
+        <CardTitle className="text-sm font-medium">
+          Table {table.name}
+        </CardTitle>
         <div
           className={`px-2 py-1 rounded-full text-xs ${
             table.status === "occupied"
@@ -43,11 +52,14 @@ const TableCard: React.FC<TableCardProps> = ({ table, setSelectedTable }) => {
         </p>
         <Sheet>
           <SheetTrigger asChild>
-            <Button className="w-full mt-4" onClick={() => setSelectedTable(table)}>
+            <Button
+              className="w-full mt-4"
+              onClick={() => setSelectedTable(table)}
+            >
               Manage Table
             </Button>
           </SheetTrigger>
-          <TableManager table={table} />
+          <TableManager table={table} tables={tables} setTables={setTables} />
         </Sheet>
       </CardContent>
     </Card>
