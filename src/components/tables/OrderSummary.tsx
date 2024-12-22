@@ -7,6 +7,7 @@ interface OrderSummaryProps {
   menuItems: MenuItem[];
   handleAddItem: (item: MenuItem) => void;
   handleRemoveItem: (itemId: number) => void;
+  handleOrderSubmit: () => void;
   totalOrderPrice: number;
 }
 
@@ -15,6 +16,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   menuItems,
   handleAddItem,
   handleRemoveItem,
+  handleOrderSubmit,
   totalOrderPrice,
 }) => {
   return (
@@ -47,7 +49,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
         </div>
       ))}
       <div className="font-bold mt-2">Total: ${totalOrderPrice.toFixed(2)}</div>
-      <Button className="w-full mt-4">Submit Order</Button>
+      <Button className="w-full mt-4" onClick={handleOrderSubmit}>Submit Order</Button>
     </div>
   );
 };

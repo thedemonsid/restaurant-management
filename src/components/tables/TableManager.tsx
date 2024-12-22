@@ -39,7 +39,13 @@ const TableManager: React.FC<TableManagerProps> = ({
     }
     fetchMenuItems();
   }, []);
-
+  const handleOrderSubmit = () => {
+      const updatedTables = tables.map((t) =>
+        t.name === table.name ? { ...t, order: [], status: "available" as Table["status"] } : t
+      );
+      setTables(updatedTables);
+      // localStorage.setItem("tables", JSON.stringify(updatedTables));
+    };
   const handleAddItem = (item: MenuItem) => {
     const updatedTables = tables.map((t) => {
       if (t.name === table.name) {
@@ -81,15 +87,13 @@ const TableManager: React.FC<TableManagerProps> = ({
     setTables(updatedTables);
     // localStorage.setItem("tables", JSON.stringify(updatedTables));
   };
-  const handleStatusChange = (value: string) => {
-    const updatedTables = tables.map((t) =>
-      t.name === table.name
-        ? { ...t, status: value as Table["status"] }
-        : t
-    );
-    setTables(updatedTables);
-    // localStorage.setItem("tables", JSON.stringify(updatedTables));
-  };
+  const handleStatusChange = (value: Table["status"]) => {
+      const updatedTables = tables.map((t) =>
+        t.name === table.name ? { ...t, status: value } : t
+      );
+      setTables(updatedTables);
+      // localStorage.setItem("tables", JSON.stringify(updatedTables));
+    };
   const filteredMenuItems = menuItems.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -162,6 +166,7 @@ const TableManager: React.FC<TableManagerProps> = ({
           handleAddItem={handleAddItem}
           handleRemoveItem={handleRemoveItem}
           totalOrderPrice={totalOrderPrice}
+          handleOrderSubmit={handleOrderSubmit}
         />
       )}
     </SheetContent>
