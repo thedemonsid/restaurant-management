@@ -44,10 +44,12 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
 
   const handlePrintOrder = () => {
     console.log("Order printed");
+  };
+  const handlePrintAndSaveOrder = () => {
+    console.log("Order printed and saved");
 
     handleSaveOrder();
   };
-
   return (
     <div className="mt-4">
       <h4 className="font-medium">Current Order</h4>
@@ -111,7 +113,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                 <span className="text-green-500 text-xl">
                   ₹{totalOrderPrice.toFixed(2)}
                 </span>
-              </div>Table
+              </div>
+              Table
             </div>
           </DialogHeader>
           <DialogTitle>Payment Method</DialogTitle>
@@ -139,9 +142,18 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             </DialogClose>
             <DialogClose>
               <Button
-                onClick={handlePrintOrder}
+                onClick={handlePrintAndSaveOrder}
                 type="submit"
                 disabled={!paymentMethod.length}
+              >
+                Print & Save Order
+              </Button>
+            </DialogClose>
+            <DialogClose>
+              <Button
+                onClick={handlePrintOrder}
+                type="submit"
+                // disabled={!paymentMethod.length}
               >
                 Print Order
               </Button>
