@@ -25,8 +25,6 @@ const Dashboard: React.FC = () => {
   // }, []);
 
   useEffect(() => {
-    //getDailyRevenue: (year: number, month: number, day: number): Promise<any> =>
-    // ipcRenderer.invoke("revenue:get-daily", year, month, day),
     async function fetchDailyRevenue(date: Date) {
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
@@ -43,7 +41,6 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     async function fetchMonthlyRevenue(year: number, month: number) {
-      // Fetch monthly revenue for the selected month from your backend or state management
       const fetchedMonthlyRevenue =
         await window.restaurant.revenue.getMonthlyRevenue(year, month);
       setMonthlyRevenue(fetchedMonthlyRevenue);
@@ -53,32 +50,17 @@ const Dashboard: React.FC = () => {
     fetchMonthlyRevenue(currentDate.getFullYear(), currentDate.getMonth() + 1);
   }, []);
 
-  // if (!stats) {
-  //   return <div>Loading...</div>;
-  // }
 
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Dashboard</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {/* <StatsCard
-          title="Total Revenue"
-          value={`₹${stats.totalRevenue}`}
-          subtitle="Total revenue generated"
-          icon={<i className="fas fa-dollar-sign"></i>}
-        /> */}
         <StatsCard
           title="Monthly Revenue"
           value={`₹${monthlyRevenue}`}
           subtitle={`Revenue for ${format(new Date(), "MMMM yyyy")}`}
           icon={<i className="fas fa-calendar-alt"></i>}
         />
-        {/* <StatsCard
-          title="Daily Revenue"
-          value={`₹${stats.dailyRevenue}`}
-          subtitle="Revenue for today"
-          icon={<i className="fas fa-calendar-day"></i>}
-        /> */}
         <StatsCard
           title="Selected Date Revenue"
           value={`₹${dailyRevenue}`}

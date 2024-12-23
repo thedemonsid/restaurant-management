@@ -112,7 +112,9 @@ const Orders = () => {
         <TableHeader>
           <TableRow>
             <TableHead className="py-2 text-center">Order ID</TableHead>
-            <TableHead className="py-2 text-center">Table Name</TableHead>
+            <TableHead className="py-2 text-center">
+              Table/Customer Name
+            </TableHead>
             <TableHead className="py-2 text-center">Amount Paid</TableHead>
             <TableHead className="py-2 text-center">Payment Method</TableHead>
             <TableHead className="py-2 text-center">Date</TableHead>
@@ -130,7 +132,12 @@ const Orders = () => {
                 ₹{order.amountPaid.toFixed(2)}
               </TableCell>
               <TableCell className="py-2 text-center">
-                {order.paymentMethod}
+                {/* If payment method = srs then Shreyas and if dcs then Damaji Shrirame else just paymentmethod */}
+                {order.paymentMethod === "srs"
+                  ? "Shreyas"
+                  : order.paymentMethod === "dcs"
+                  ? "Damaji Shrirame"
+                  : order.paymentMethod}
               </TableCell>
               <TableCell className="py-2 text-center">
                 {format(
@@ -181,10 +188,24 @@ const Orders = () => {
                             </span>
                           </div>
                         ))}
+                        {/* //*Final Price With sum of all orderItems */}
+                        <div className="flex justify-between items-center py-1">
+                          <span>
+                            <strong>Total</strong>
+                          </span>
+                          <span>
+                            ₹
+                            {orderItems
+                              .reduce(
+                                (acc, item) => acc + item.price * item.quantity,
+                                0
+                              )
+                              .toFixed(2)}
+                          </span>
+                        </div>
                       </div>
                     )}
-                    <DialogFooter>
-                    </DialogFooter>
+                    <DialogFooter></DialogFooter>
                   </DialogContent>
                 </Dialog>
               </TableCell>

@@ -39,6 +39,12 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   const [paymentMethod, setPaymentMethod] = useState("");
 
   const handleSaveOrder = () => {
+    if (!paymentMethod.length) return;
+    if (paymentMethod === "srs" || paymentMethod === "dcs") {
+      handleOrderSubmit({ amountPaid: 0, paymentMethod });
+      // alert("Order submitted successfully by " + paymentMethod);
+      return;
+    }
     handleOrderSubmit({ amountPaid: totalOrderPrice, paymentMethod });
   };
 
@@ -47,8 +53,13 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   };
   const handlePrintAndSaveOrder = () => {
     console.log("Order printed and saved");
-
-    handleSaveOrder();
+    if (!paymentMethod.length) return;
+    if (paymentMethod === "srs" || paymentMethod === "dcs") {
+      handleOrderSubmit({ amountPaid: 0, paymentMethod });
+      // alert("Order submitted successfully by " + paymentMethod);
+      return;
+    }
+    handleOrderSubmit({ amountPaid: totalOrderPrice, paymentMethod });
   };
   return (
     <div className="mt-4">
@@ -128,6 +139,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             <SelectContent>
               <SelectItem value="cash">Cash</SelectItem>
               <SelectItem value="online">UPI / Online</SelectItem>
+              <SelectItem value="srs">Shreyash Shrirame</SelectItem>
+              <SelectItem value="dcs">Damaji Shrirame</SelectItem>
             </SelectContent>
           </Select>
           <DialogFooter>
@@ -142,7 +155,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             </DialogClose>
             <DialogClose>
               <Button
-                onClick={handlePrintOrder}
+                onClick={handlePrintAndSaveOrder}
                 type="submit"
                 disabled={!paymentMethod.length}
               >

@@ -12,7 +12,7 @@ export const schema = `
     "tableName" TEXT,
     "isParcel" BOOLEAN NOT NULL DEFAULT FALSE,
     "amountPaid" REAL NOT NULL DEFAULT 0.0,
-    "paymentMethod" TEXT NOT NULL CHECK ("paymentMethod" IN ('cash', 'card', 'online')),
+    "paymentMethod" TEXT NOT NULL CHECK ("paymentMethod" IN ('cash', 'card', 'online','srs','dcs')), -- //! Added 'srs' and 'dcs' as payment methods Shreyas and Damaji Kaka
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
   );
