@@ -42,7 +42,7 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
   }) => {
     const createdOrder = await window.restaurant.order.addOrder(
       {
-        tableName:"",
+        tableName: "",
         isParcel: 1,
         amountPaid: amountPaid,
         paymentMethod: paymentMethod,
@@ -52,12 +52,12 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
         quantity: orderItem.quantity,
       }))
     );
-    alert(`Order submitted successfully! ${createdOrder}`);
-    const updatedParcels = parcels.map((t) =>
-      t.recipient === parcel.recipient ? { ...t, order: [] } : t
+    const updatedParcels = parcels.filter(
+      (t) => t.recipient !== parcel.recipient
     );
 
     setParcels(updatedParcels);
+    alert(`Order submitted successfully! ${createdOrder}`);
   };
   const handleAddItem = (item: MenuItem) => {
     const updatedOrder = [...orderItems, { menuItem: item, quantity: 1 }];

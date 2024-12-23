@@ -17,19 +17,28 @@ const ParcelCard: React.FC<ParcelCardProps> = ({
   setParcels,
   parcels,
 }) => {
+  const handleCancelParcel = () => {
+    const updatedParcels = parcels.filter(
+      (t) => t.recipient !== parcel.recipient
+    );
+    setParcels(updatedParcels);
+  };
   return (
     <Card
       key={parcel.id as React.Key}
-      className="p-4 border rounded-lg shadow-sm cursor-pointer hover:bg-gray-100"
+      className="border max-w-80 min-w-72 rounded-lg shadow-sm cursor-pointer hover:bg-gray-100"
     >
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">
-          <span className="text-red-600 shadow-sm text-md ml-3 bg-green-300 p-2 rounded-lg">
-            {parcel.recipient}
-          </span>
-        </CardTitle>
+      <CardHeader>
+        <div className="flex items-center justify-between space-y-0 pb-2 gap-3">
+          <CardTitle className="text-xl">{parcel.recipient}</CardTitle>
+          <Button onClick={handleCancelParcel} variant={"destructive"}>
+            Cancel
+          </Button>
+        </div>
       </CardHeader>
+      <hr></hr>
       <CardContent>
+        <p className="text-sm text-center">Order : </p>
         <ul className="mt-2">
           {parcel.order.map((item, index) => (
             <li key={index} className="text-sm">
