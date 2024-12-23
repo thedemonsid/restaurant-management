@@ -17,22 +17,31 @@ export function addOrder(
   `);
 
   const transaction = db.transaction(() => {
-    const result = orderStmt.run({
-      tableName: order.tableName,
-      isParcel: order.isParcel,
-      amountPaid: order.amountPaid,
-      paymentMethod: order.paymentMethod,
-    });
-
-    const orderId = result.lastInsertRowid;
-
-    orderedItems.forEach((item) => {
-      orderItemsStmt.run({
-        order_id: orderId,
-        menu_item_id: item.menu_item_id,
-        quantity: item.quantity,
+    try {
+      const result = orderStmt.run({
+        tableName: order.tableName,
+        isParcel: order.isParcel,
+        amountPaid: order.amountPaid,
+        paymentMethod: order.paymentMethod,
       });
-    });
+
+      const orderId = result.lastInsertRowid;
+
+      orderedItems.forEach((item) => {
+        orderItemsStmt.run({
+          order_id: orderId,
+          menu_item_id: item.menu_item_id,
+          quantity: item.quantity,
+        });
+      });
+    } catch (error) {
+      if (error) {
+        console.error("Error while adding order, ", error);
+        // Handle the error, e.g., by notifying the user or logging it
+      } else {
+        throw error;
+      }
+    }
   });
 
   transaction();

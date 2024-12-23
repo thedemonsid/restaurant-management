@@ -41,6 +41,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <span>Tables</span>
           </Link>
           <Link
+            to="/parcels"
+            className={`flex items-center space-x-3 rounded-lg px-3 py-2 text-sm ${
+              location.pathname === "/parcels"
+                ? "bg-secondary"
+                : "hover:bg-secondary/50"
+            }`}
+          >
+            <ClipboardList className="h-4 w-4" />
+            <span>Parcels</span>
+          </Link>
+          <Link
             to="/orders"
             className={`flex items-center space-x-3 rounded-lg px-3 py-2 text-sm ${
               location.pathname === "/orders"

@@ -5,13 +5,16 @@ export interface Table {
   status: TableStatus;
   order: OrderItem[];
 }
-
 export interface MenuItem {
   id: number;
   name: string;
   price: number;
 }
-
+export interface Parcel {
+  id: number;
+  recipient: string;
+  order: OrderItem[];
+}
 export interface OrderItem {
   menuItem: MenuItem;
   quantity: number;
