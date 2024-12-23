@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Dialog,
   DialogContent,
@@ -17,31 +25,83 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Order } from "@/electron/database/types";
+
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [orderItems, setOrderItems] = useState<any[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
+
   useEffect(() => {
     async function fetchOrders() {
       const fetchedOrders = await window.restaurant.order.getOrders();
       console.log("Fetched Orders", fetchedOrders);
-
       setOrders(fetchedOrders);
     }
     fetchOrders();
   }, []);
 
+  useEffect(() => {
+    const filterOrdersByDate = () => {
+      if (!selectedDate) return;
+
+      const startOfDay = new Date(selectedDate);
+      startOfDay.setHours(6, 0, 0, 0); //! Set to 6 AM of the selected date
+
+      const endOfDay = new Date(startOfDay);
+      endOfDay.setDate(startOfDay.getDate() + 1); //! Set to 6 AM of the next day
+
+      const filtered = orders.filter((order) => {
+        const orderDate = new Date(order.createdAt);
+        return orderDate >= startOfDay && orderDate < endOfDay;
+      });
+
+      setFilteredOrders(filtered);
+    };
+
+    filterOrdersByDate();
+  }, [orders, selectedDate]);
+
   const handleOrderClick = async (order: Order) => {
     setSelectedOrder(order);
     const items = await window.restaurant.order.getOrderItems(order.id);
     console.log("Order Items", items);
-
     setOrderItems(items);
   };
 
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Orders</h1>
+      <div className="mb-4">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={`w-[280px] justify-start text-left font-normal ${
+                !selectedDate && "text-muted-foreground"
+              }`}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {selectedDate ? (
+                format(selectedDate, "PPP")
+              ) : (
+                <span>Pick a date</span>
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0">
+            <Calendar
+              mode="single"
+              //@ts-ignore
+              selected={selectedDate}
+              //@ts-ignore
+              onSelect={setSelectedDate}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
+      </div>
       <Table className="min-w-full bg-white">
         <TableHeader>
           <TableRow>
@@ -53,7 +113,7 @@ const Orders = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {orders.map((order) => (
+          {filteredOrders.map((order) => (
             <TableRow key={order.id}>
               <TableCell className="py-2 text-center">{order.id}</TableCell>
               <TableCell className="py-2 text-center">
@@ -85,7 +145,7 @@ const Orders = () => {
                           <strong>Table Name:</strong> {selectedOrder.tableName}
                         </p>
                         <p>
-                          <strong>Amount Paid:</strong> $
+                          <strong>Amount Paid:</strong> ₹
                           {selectedOrder.amountPaid.toFixed(2)}
                         </p>
                         <p>
