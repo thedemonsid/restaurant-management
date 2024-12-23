@@ -17,6 +17,8 @@ export default function Parcels() {
   }, [parcels]);
 
   const [selectedParcel, setSelectedParcel] = useState<Parcel | null>(null);
+  console.log(selectedParcel);
+  
   const handleAddParcel = () => {
     if (newReceipient) {
       setParcels([

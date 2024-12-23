@@ -3,8 +3,6 @@ import {
   LayoutGrid,
   Utensils,
   ClipboardList,
-  Users,
-  Settings,
   Menu,
 } from "lucide-react";
 

@@ -36,7 +36,7 @@ export default function Tables() {
   }, [tables]);
 
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
-
+  console.log(selectedTable);
   const groupedTables = tables.reduce((acc, table) => {
     const section = table.name.charAt(0);
     if (!acc[section]) {

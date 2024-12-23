@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
-import { MenuItem, OrderItem, Table } from "@/types/index";
+import { MenuItem, OrderItem } from "@/types/index";
 import {
   Dialog,
   DialogClose,
