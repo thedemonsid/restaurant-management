@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { format } from "date-fns";
+import { addMinutes, format, parseISO } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -37,7 +37,12 @@ const Orders = () => {
     async function fetchOrders() {
       const fetchedOrders = await window.restaurant.order.getOrders();
       console.log("Fetched Orders", fetchedOrders);
-      setOrders(fetchedOrders);
+      // Sort orders by createdAt in descending order
+      const sortedOrders = fetchedOrders.sort(
+        (a: Order, b: Order) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setOrders(sortedOrders);
     }
     fetchOrders();
   }, []);
@@ -47,14 +52,15 @@ const Orders = () => {
       if (!selectedDate) return;
 
       const startOfDay = new Date(selectedDate);
-      startOfDay.setHours(6, 0, 0, 0); //! Set to 6 AM of the selected date
+      startOfDay.setHours(0, 0, 0, 0);
 
       const endOfDay = new Date(startOfDay);
-      endOfDay.setDate(startOfDay.getDate() + 1); //! Set to 6 AM of the next day
+      endOfDay.setDate(startOfDay.getDate() + 1);
 
       const filtered = orders.filter((order) => {
         const orderDate = new Date(order.createdAt);
-        return orderDate >= startOfDay && orderDate < endOfDay;
+        const adjustedOrderDate = addMinutes(orderDate, 330); //! Adjust by 5.5 hours (330 minutes) Probably because of UTC
+        return adjustedOrderDate >= startOfDay && adjustedOrderDate < endOfDay;
       });
 
       setFilteredOrders(filtered);
@@ -109,6 +115,7 @@ const Orders = () => {
             <TableHead className="py-2 text-center">Table Name</TableHead>
             <TableHead className="py-2 text-center">Amount Paid</TableHead>
             <TableHead className="py-2 text-center">Payment Method</TableHead>
+            <TableHead className="py-2 text-center">Date</TableHead>
             <TableHead className="py-2 text-center">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -124,6 +131,14 @@ const Orders = () => {
               </TableCell>
               <TableCell className="py-2 text-center">
                 {order.paymentMethod}
+              </TableCell>
+              <TableCell className="py-2 text-center">
+                {format(
+                  parseISO(
+                    addMinutes(new Date(order.createdAt), 330).toISOString()
+                  ),
+                  "PPPpp"
+                )}
               </TableCell>
               <TableCell className="py-2 text-center">
                 <Dialog>
@@ -169,9 +184,6 @@ const Orders = () => {
                       </div>
                     )}
                     <DialogFooter>
-                      <Button onClick={() => setSelectedOrder(null)}>
-                        Close
-                      </Button>
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>

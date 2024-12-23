@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-// import { Label } from "@/components/ui/label";
 import { Search, Plus } from "lucide-react";
 import { Parcel, MenuItem } from "@/types/index";
 import OrderSummary from "@/components/parcels/OrderSummary";
@@ -20,7 +19,6 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-  const [orderItems, setOrderItems] = useState(parcel.order);
 
   useEffect(() => {
     async function fetchMenuItems() {
@@ -33,6 +31,7 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
     }
     fetchMenuItems();
   }, []);
+
   const handleOrderSubmit = async ({
     amountPaid,
     paymentMethod,
@@ -40,6 +39,7 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
     amountPaid: number;
     paymentMethod: string;
   }) => {
+    console.log("Order submitted", amountPaid, paymentMethod, parcel.order);
     const createdOrder = await window.restaurant.order.addOrder(
       {
         tableName: "",
@@ -52,38 +52,62 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
         quantity: orderItem.quantity,
       }))
     );
+    alert(`Order submitted successfully! ${createdOrder}`);
     const updatedParcels = parcels.filter(
       (t) => t.recipient !== parcel.recipient
     );
 
     setParcels(updatedParcels);
-    alert(`Order submitted successfully! ${createdOrder}`);
+    // setSelectedParcel(null);
   };
+
   const handleAddItem = (item: MenuItem) => {
-    const updatedOrder = [...orderItems, { menuItem: item, quantity: 1 }];
-    setOrderItems(updatedOrder);
-    const updatedParcels = parcels.map((p) =>
-      p.id === parcel.id ? { ...p, order: updatedOrder } : p
-    );
+    const updatedParcels = parcels.map((p) => {
+      if (p.id === parcel.id) {
+        const existingOrderItem = p.order.find(
+          (orderItem) => orderItem.menuItem.id === item.id
+        );
+        let newOrder;
+        if (existingOrderItem) {
+          newOrder = p.order.map((orderItem) =>
+            orderItem.menuItem.id === item.id
+              ? { ...orderItem, quantity: orderItem.quantity + 1 }
+              : orderItem
+          );
+        } else {
+          newOrder = [...p.order, { menuItem: item, quantity: 1 }];
+        }
+        return { ...p, order: newOrder };
+      }
+      return p;
+    });
     setParcels(updatedParcels);
+    // setSelectedParcel(updatedParcels.find((p) => p.id === parcel.id) || null);
   };
 
   const handleRemoveItem = (itemId: number) => {
-    const updatedOrder = orderItems.filter(
-      (item) => item.menuItem.id !== itemId
-    );
-    setOrderItems(updatedOrder);
-    const updatedParcels = parcels.map((p) =>
-      p.id === parcel.id ? { ...p, order: updatedOrder } : p
-    );
+    const updatedParcels = parcels.map((p) => {
+      if (p.id === parcel.id) {
+        const newOrder = p.order
+          .map((orderItem) =>
+            orderItem.menuItem.id === itemId
+              ? { ...orderItem, quantity: orderItem.quantity - 1 }
+              : orderItem
+          )
+          .filter((orderItem) => orderItem.quantity > 0);
+        return { ...p, order: newOrder };
+      }
+      return p;
+    });
     setParcels(updatedParcels);
+    // setSelectedParcel(updatedParcels.find((p) => p.id === parcel.id) || null);
   };
 
   const filteredMenuItems = menuItems.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalOrderPrice = orderItems.reduce(
+  const totalOrderPrice = parcel.order.reduce(
     (total, orderItem) => total + orderItem.menuItem.price * orderItem.quantity,
     0
   );
@@ -117,9 +141,9 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
             </div>
           ))}
         </div>
-        {orderItems.length > 0 && (
+        {parcel.order.length > 0 && (
           <OrderSummary
-            order={orderItems}
+            order={parcel.order}
             handleAddItem={handleAddItem}
             handleRemoveItem={handleRemoveItem}
             totalOrderPrice={totalOrderPrice}
