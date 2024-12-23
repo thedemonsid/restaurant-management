@@ -73,7 +73,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Menu className="h-4 w-4" />
             <span>Menu</span>
           </Link>
-          <Link
+          {/* <Link
             to="/staff"
             className={`flex items-center space-x-3 rounded-lg px-3 py-2 text-sm ${
               location.pathname === "/staff"
@@ -94,7 +94,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           >
             <Settings className="h-4 w-4" />
             <span>Settings</span>
-          </Link>
+          </Link> */}
         </nav>
       </div>
       <div className="flex-1 overflow-auto">

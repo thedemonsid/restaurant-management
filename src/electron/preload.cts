@@ -25,4 +25,10 @@ contextBridge.exposeInMainWorld("restaurant", {
     getOrderItems: (orderId: string): Promise<any> =>
       ipcRenderer.invoke("order:get-order-items", orderId),
   },
+  revenue: {
+    getMonthlyRevenue: (year: number, month: number): Promise<any> =>
+      ipcRenderer.invoke("revenue:get-monthly", year, month),
+    getDailyRevenue: (year: number, month: number, day: number): Promise<any> =>
+      ipcRenderer.invoke("revenue:get-daily", year, month, day),
+  },
 });

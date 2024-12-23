@@ -11,5 +11,13 @@ interface Window {
       getOrders: () => Promise<any>;
       getOrderItems: (orderId: number) => Promise<any>;
     };
+    revenue: {
+      getMonthlyRevenue: (year: number, month: number) => Promise<any>;
+      getDailyRevenue: (
+        year: number,
+        month: number,
+        day: number
+      ) => Promise<any>;
+    };
   };
 }

@@ -40,7 +40,39 @@ class RestaurantDB {
   public getOrderItems(orderId: number) {
     return getOrderItems(this.db, orderId);
   }
+  //! Revenue related functions
+  public async getMonthlyRevenue(year: number, month: number) {
+    const orders = await getOrders(this.db);
+    const monthlyOrders = orders.filter((order) => {
+      const orderDate = new Date(order.createdAt);
+      return (
+        orderDate.getFullYear() === year && orderDate.getMonth() === month - 1
+      );
+    });
 
+    const monthlyRevenue = monthlyOrders.reduce((total, order) => {
+      return total + order.amountPaid;
+    }, 0);
+
+    return monthlyRevenue;
+  }
+  public async getDailyRevenue(year: number, month: number, day: number) {
+    const orders = await getOrders(this.db);
+    const dailyOrders = orders.filter((order) => {
+      const orderDate = new Date(order.createdAt);
+      return (
+        orderDate.getFullYear() === year &&
+        orderDate.getMonth() === month - 1 &&
+        orderDate.getDate() === day
+      );
+    });
+
+    const dailyRevenue = dailyOrders.reduce((total, order) => {
+      return total + order.amountPaid;
+    }, 0);
+
+    return dailyRevenue;
+  }
   public close(): void {
     this.db.close();
   }

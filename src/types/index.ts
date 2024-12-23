@@ -25,8 +25,10 @@ export interface OrderItem {
 // }
 export interface DashboardStats {
   totalRevenue: number;
-  activeTables: number;
-  totalTables: number;
-  pendingOrders: number;
-  totalCustomers: number;
+  totalOrders?: number;
+  totalTables?: number;
+  totalParcels?: number;
+  monthlyRevenue: number;
+  dailyRevenue: number;
+
 }

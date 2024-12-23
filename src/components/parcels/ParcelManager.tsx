@@ -42,7 +42,7 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
     console.log("Order submitted", amountPaid, paymentMethod, parcel.order);
     const createdOrder = await window.restaurant.order.addOrder(
       {
-        tableName: "",
+        tableName: parcel.recipient, //! This is the Customer Name
         isParcel: 1,
         amountPaid: amountPaid,
         paymentMethod: paymentMethod,

@@ -1,103 +1,124 @@
-import { DollarSign, Users, Clock, UserCheck } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { format } from "date-fns";
 import { StatsCard } from "@/components/stats-card";
-import { RecentOrders } from "@/components/recent-orders";
-import { TableOverview } from "@/components/table-overview";
-import type { DashboardStats, Order, Table } from "@/types/index";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { CalendarIcon } from "lucide-react";
 
-// Mock data
-const stats: DashboardStats = {
-  totalRevenue: 1234.56,
-  activeTables: 8,
-  totalTables: 12,
-  pendingOrders: 6,
-  totalCustomers: 42,
-};
+const Dashboard: React.FC = () => {
+  // const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [dailyRevenue, setDailyRevenue] = useState<number>(0);
+  const [monthlyRevenue, setMonthlyRevenue] = useState<number>(0);
 
-const recentOrders: Order[] = [
-  {
-    tableId: 4,
-    items: [
-      { name: "Margherita Pizza", quantity: 1, price: 12.99 },
-      { name: "Coke", quantity: 2, price: 2.99 },
-    ],
-    status: "in-progress",
-    time: "12:30",
-    discount: 0,
-  },
-  {
-    tableId: 2,
-    items: [
-      { name: "Pasta Carbonara", quantity: 1, price: 14.99 },
-      { name: "Wine", quantity: 1, price: 6.99 },
-    ],
-    status: "ready",
-    time: "12:25",
-    discount: 0,
-  },
-  {
-    tableId: 7,
-    items: [
-      { name: "Caesar Salad", quantity: 2, price: 8.99 },
-      { name: "Sprite", quantity: 1, price: 2.99 },
-    ],
-    status: "new",
-    time: "12:20",
-    discount: 0,
-  },
-];
+  // useEffect(() => {
+  //   async function fetchDashboardData() {
 
-const tables: Table[] = [
-  { id: 1, seats: 4, status: "occupied" },
-  { id: 2, seats: 2, status: "available" },
-  { id: 3, seats: 6, status: "reserved" },
-  { id: 4, seats: 4, status: "occupied" },
-  { id: 5, seats: 2, status: "occupied" },
-  { id: 6, seats: 8, status: "available" },
-  { id: 7, seats: 4, status: "reserved" },
-  { id: 8, seats: 4, status: "available" },
-];
+  //   }
 
-export default function Dashboard() {
+  //   fetchDashboardData();
+  // }, []);
+
+  useEffect(() => {
+    //getDailyRevenue: (year: number, month: number, day: number): Promise<any> =>
+    // ipcRenderer.invoke("revenue:get-daily", year, month, day),
+    async function fetchDailyRevenue(date: Date) {
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const fetchedDailyRevenue =
+        await window.restaurant.revenue.getDailyRevenue(year, month, day);
+      setDailyRevenue(fetchedDailyRevenue);
+    }
+
+    if (selectedDate) {
+      fetchDailyRevenue(selectedDate);
+    }
+  }, [selectedDate]);
+
+  useEffect(() => {
+    async function fetchMonthlyRevenue(year: number, month: number) {
+      // Fetch monthly revenue for the selected month from your backend or state management
+      const fetchedMonthlyRevenue =
+        await window.restaurant.revenue.getMonthlyRevenue(year, month);
+      setMonthlyRevenue(fetchedMonthlyRevenue);
+    }
+
+    const currentDate = new Date();
+    fetchMonthlyRevenue(currentDate.getFullYear(), currentDate.getMonth() + 1);
+  }, []);
+
+  // if (!stats) {
+  //   return <div>Loading...</div>;
+  // }
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground">
-          Overview of your restaurant's performance
-        </p>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-4">
-        <StatsCard
+      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {/* <StatsCard
           title="Total Revenue"
-          value={`$${stats.totalRevenue}`}
-          subtitle="Today's earnings"
-          icon={<DollarSign className="h-4 w-4" />}
-        />
+          value={`₹${stats.totalRevenue}`}
+          subtitle="Total revenue generated"
+          icon={<i className="fas fa-dollar-sign"></i>}
+        /> */}
         <StatsCard
-          title="Active Tables"
-          value={`${stats.activeTables}/${stats.totalTables}`}
-          subtitle="Currently occupied"
-          icon={<Users className="h-4 w-4" />}
+          title="Monthly Revenue"
+          value={`₹${monthlyRevenue}`}
+          subtitle={`Revenue for ${format(new Date(), "MMMM yyyy")}`}
+          icon={<i className="fas fa-calendar-alt"></i>}
         />
+        {/* <StatsCard
+          title="Daily Revenue"
+          value={`₹${stats.dailyRevenue}`}
+          subtitle="Revenue for today"
+          icon={<i className="fas fa-calendar-day"></i>}
+        /> */}
         <StatsCard
-          title="Pending Orders"
-          value={stats.pendingOrders}
-          subtitle="Orders in progress"
-          icon={<Clock className="h-4 w-4" />}
-        />
-        <StatsCard
-          title="Total Customers"
-          value={stats.totalCustomers}
-          subtitle="Served today"
-          icon={<UserCheck className="h-4 w-4" />}
+          title="Selected Date Revenue"
+          value={`₹${dailyRevenue}`}
+          subtitle={`Revenue for ${
+            selectedDate ? format(selectedDate, "PPP") : "selected date"
+          }`}
+          icon={<i className="fas fa-calendar"></i>}
         />
       </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <RecentOrders orders={recentOrders} />
-        <TableOverview tables={tables} />
+      <div className="mb-4">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={`w-[280px] justify-start text-left font-normal ${
+                !selectedDate && "text-muted-foreground"
+              }`}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {selectedDate ? (
+                format(selectedDate, "PPP")
+              ) : (
+                <span>Pick a date</span>
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0">
+            <Calendar
+              mode="single"
+              //@ts-ignore //Todo: Fix this
+              selected={selectedDate}
+              //@ts-ignore //Todo: Fix this
+              onSelect={setSelectedDate}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );
-}
+};
+
+export default Dashboard;

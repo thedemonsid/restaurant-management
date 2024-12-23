@@ -47,7 +47,6 @@ ipcMain.handle(
   ) => {
     // console.log("order:add-order", order, orderedItems);
     try {
-
       return await RestaurantDB.addOrder(order, orderedItems);
     } catch (error) {
       console.error("Failed to add order:", error);
@@ -73,3 +72,27 @@ ipcMain.handle("order:get-order-items", async (event, orderId) => {
     throw error;
   }
 });
+// * revenue:get-monthly
+ipcMain.handle(
+  "revenue:get-monthly",
+  async (event, year: number, month: number) => {
+    try {
+      return await RestaurantDB.getMonthlyRevenue(year, month);
+    } catch (error) {
+      console.error("Failed to get monthly revenue:", error);
+      throw error;
+    }
+  }
+);
+// * revenue:get-daily
+ipcMain.handle(
+  "revenue:get-daily",
+  async (event, year: number, month: number, day: number) => {
+    try {
+      return await RestaurantDB.getDailyRevenue(year, month, day);
+    } catch (error) {
+      console.error("Failed to get daily revenue:", error);
+      throw error;
+    }
+  }
+);
