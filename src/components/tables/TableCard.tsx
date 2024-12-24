@@ -19,51 +19,55 @@ const TableCard: React.FC<TableCardProps> = ({
   tables,
 }) => {
   return (
-    <Card
-      key={table.name as React.Key}
-      className={cn(
-        table.status === "occupied" && "bg-green-100",
-        table.status === "reserved" && "bg-yellow-100",
-        "min-w-28 min-h-28 max-w-56 max-h-40 mb-2"
-      )}
-    >
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">
-         <span> Table </span><span className="text-red-600 shadow-sm text-xl ml-3 bg-green-300 p-2 rounded-lg">{table.name}</span>
-        </CardTitle>
-        <div
-          className={`px-2 py-1 rounded-full text-xs ${
-            table.status === "occupied"
-              ? "bg-green-100 text-green-800"
-              : table.status === "reserved"
-              ? "bg-yellow-100 text-yellow-800"
-              : "bg-gray-100 text-gray-800"
-          }`}
+    <Sheet>
+      <SheetTrigger asChild>
+        <Card
+          key={table.name as React.Key}
+          className={cn(
+            table.status === "occupied" && "bg-green-100",
+            table.status === "reserved" && "bg-yellow-100",
+            "min-w-28 min-h-28 max-w-56 max-h-40 mb-2 cursor-pointer"
+          )}
+          onClick={() => setSelectedTable(table)}
         >
-          {table.status}
-        </div>
-      </CardHeader>
-      <CardContent>
-        <p className="text-xs text-muted-foreground">
-          {table.status === "occupied"
-            ? "Currently in use"
-            : table.status === "reserved"
-            ? "Reserved"
-            : "Available for seating"}
-        </p>
-        <Sheet>
-          <SheetTrigger asChild>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              <span> Table </span>
+              <span className="text-red-600 shadow-sm text-xl ml-3 bg-green-300 p-2 rounded-lg">
+                {table.name}
+              </span>
+            </CardTitle>
+            <div
+              className={`px-2 py-1 rounded-full text-xs ${
+                table.status === "occupied"
+                  ? "bg-green-100 text-green-800"
+                  : table.status === "reserved"
+                  ? "bg-yellow-100 text-yellow-800"
+                  : "bg-gray-100 text-gray-800"
+              }`}
+            >
+              {table.status}
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p className="text-xs text-muted-foreground">
+              {table.status === "occupied"
+                ? "Currently in use"
+                : table.status === "reserved"
+                ? "Reserved"
+                : "Available for seating"}
+            </p>
             <Button
               className="w-full mt-4"
               onClick={() => setSelectedTable(table)}
             >
               Manage Table
             </Button>
-          </SheetTrigger>
-          <TableManager table={table} tables={tables} setTables={setTables} />
-        </Sheet>
-      </CardContent>
-    </Card>
+          </CardContent>
+        </Card>
+      </SheetTrigger>
+      <TableManager table={table} tables={tables} setTables={setTables} />
+    </Sheet>
   );
 };
 
