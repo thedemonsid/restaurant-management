@@ -1,7 +1,7 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Layout } from "@/web/layout";
-import Dashboard from "@/web/pages/dashboard";
-import Tables from "@/web/pages/tables";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { Layout } from "../web/layout";
+import Dashboard from "../web/pages/dashboard";
+import Tables from "../web/pages/tables";
 import Test from "./pages/Test";
 import Menu from "./pages/Menu";
 import Orders from "./pages/orders";

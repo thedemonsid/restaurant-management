@@ -2,9 +2,12 @@
   "name": "restaurant-management-smarudhi",
   "private": true,
   "version": "0.0.0",
+  "description": "Restaurant Management",
+  "author": "The Demon Sid",
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
+    "dist": "build",
     "dev": "pnpm run \"/^dev:.*/\"",
     "dev:react": "vite",
     "dev:electron": "pnpm transpile:electron && cross-env NODE_ENV=development electron .",
@@ -15,6 +18,32 @@
     "dist:win": "pnpm transpile:electron && pnpm build:react && electron-builder --win --x64",
     "dist:linux": "pnpm transpile:electron && pnpm build:react && electron-builder --linux --x64",
     "postinstall": "electron-rebuild -f -w better-sqlite3"
+  },
+  "build": {
+    "appId": "com.the_demon_sid.samrudhi",
+    "files": [
+      "dist-electron",
+      "dist-react"
+    ],
+    "extraResources": [
+      "dist-electron/preload.cjs",
+      "src/assets/**",
+      {
+        "from": "src/electron/database/restaurant.db",
+        "to": "database/restaurant.db"
+      }
+    ],
+    "icon": "src/assets/icon.png",
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Utility"
+    },
+    "win": {
+      "target": "NSIS"
+    }
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.4",
