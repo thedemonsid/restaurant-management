@@ -53,13 +53,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   };
   const handlePrintAndSaveOrder = () => {
     console.log("Order printed and saved");
-    if (!paymentMethod.length) return;
-    if (paymentMethod === "srs" || paymentMethod === "dcs") {
-      handleOrderSubmit({ amountPaid: 0, paymentMethod });
-      // alert("Order submitted successfully by " + paymentMethod);
-      return;
-    }
-    handleOrderSubmit({ amountPaid: totalOrderPrice, paymentMethod });
+    handleSaveOrder();
   };
   return (
     <div className="mt-4">
