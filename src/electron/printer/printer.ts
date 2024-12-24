@@ -36,7 +36,8 @@ export async function printReceipt(data: ReceiptData) {
           }
           h1 {
             text-align: center;
-            font-size: 24px;
+            font-size: 40px;
+            font-weight: bold;
             margin-bottom: 10px;
           }
           hr {
@@ -47,6 +48,7 @@ export async function printReceipt(data: ReceiptData) {
           p {
             margin: 5px 0;
             font-size: 14px;
+            font-weight: bold;
           }
           .item {
             display: flex;
@@ -59,17 +61,17 @@ export async function printReceipt(data: ReceiptData) {
           }
         </style>
       <body>
-        <h1>Samrudhi Pure Veg</h1>
-        <p>Kondhej Road A/P Jeur Karamala </p>
+        <h1>समृद्धी रेस्टॉरंट - शुद्ध शाकाहारी</h1>
+        <p>कोंढेज चौक, जेऊर (413202) नगर टेंभुर्णी महामार्ग</p>
         <hr>
         <p>Order: ${data.orderId}</p>
         <p>Date: ${data.date}</p>
         <hr>
         ${data.items.map(item => `
-          <p>${item.name} * ${item.quantity} - $${item.price} -${item.price*item.quantity} </p>
+          <p>${item.name} * ${item.quantity} - ₹${item.price} - ₹${item.price * item.quantity} </p>
         `).join('')}
         <hr>
-        <p>Total: $${data.total}</p>
+        <p>Total: ₹${data.total}</p>
       </body>
     </html>
   `;
