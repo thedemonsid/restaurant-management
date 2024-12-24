@@ -113,7 +113,7 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
   );
 
   return (
-    <SheetContent side="right" className="w-[400px] sm:w-[540px]">
+    <SheetContent side="right" className="w-[400px] sm:w-[540px] overflow-y-auto">
       <SheetHeader>
         <SheetTitle>Manage Parcel {parcel.recipient}</SheetTitle>
       </SheetHeader>
@@ -126,7 +126,7 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="h-[200px] overflow-y-auto">
+        <div className="h-48 overflow-y-auto">
           {filteredMenuItems.map((item) => (
             <div
               key={item.id}

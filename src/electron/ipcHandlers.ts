@@ -1,6 +1,7 @@
 import { ipcMain } from "electron";
 import RestaurantDB from "./database/index.js";
 import { Order } from "./database/types.js";
+import { printReceipt } from "./printer/printer.js";
 
 ipcMain.handle("menu:add-item", async (event, item) => {
   try {
@@ -96,3 +97,15 @@ ipcMain.handle(
     }
   }
 );
+//* Printer 
+
+ipcMain.handle('order:print-receipt', async (event, data) => {
+  try {
+    await printReceipt(data);
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to print receipt:", error);
+    //@ts-ignore
+    return { success: false, error: error.message };
+  }
+});

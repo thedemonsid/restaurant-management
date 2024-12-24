@@ -29,7 +29,7 @@ const ParcelCard: React.FC<ParcelCardProps> = ({
       className="border max-w-80 min-w-72 rounded-lg shadow-sm cursor-pointer hover:bg-gray-100"
     >
       <CardHeader>
-        <div className="flex items-center justify-between space-y-0 pb-2 gap-3">
+        <div className="flex items-center justify-between space-y-0">
           <CardTitle className="text-xl">{parcel.recipient}</CardTitle>
           <Button onClick={handleCancelParcel} variant={"destructive"}>
             Cancel
@@ -38,14 +38,28 @@ const ParcelCard: React.FC<ParcelCardProps> = ({
       </CardHeader>
       <hr></hr>
       <CardContent>
-        <p className="text-sm text-center">Order : </p>
-        <ul className="mt-2">
+        <p className="text-sm text-center">Order</p>
+        <ul className="mt-2 h-40 overflow-y-auto">
           {parcel.order.map((item, index) => (
-            <li key={index} className="text-sm">
-              {item.menuItem.name} (x{item.quantity})
+            <li key={index} className="text-sm flex justify-between">
+              <span>
+                {" "}
+                {item.menuItem.name} (x{item.quantity})
+              </span>{" "}
+              <span>{item.menuItem.price * item.quantity}</span>
             </li>
           ))}
         </ul>
+        <hr></hr>
+        <div className="text-sm flex justify-between">
+          <span>Total</span>{" "}
+          <span>
+            {parcel.order.reduce(
+              (acc, item) => acc + item.menuItem.price * item.quantity,
+              0
+            )}
+          </span>
+        </div>
         <Sheet>
           <SheetTrigger asChild>
             <Button

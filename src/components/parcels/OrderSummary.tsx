@@ -48,41 +48,55 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   };
 
   const handlePrintOrder = () => {
-    console.log("Order printed");
+    const receiptData = {
+      orderId: Math.floor(Math.random() * 1000000),
+      date: new Date().toLocaleString(),
+      items: order.map((orderItem) => ({
+        name: orderItem.menuItem.name,
+        quantity: orderItem.quantity,
+        price: orderItem.menuItem.price,
+      })),
+      total: totalOrderPrice,
+    };
+    window.restaurant.order.printReceipt(receiptData);
   };
+
   const handlePrintAndSaveOrder = () => {
     console.log("Order printed and saved");
+    handlePrintOrder();
     handleSaveOrder();
   };
   return (
-    <div className="mt-4">
+    <div className="mt-4 space-y-4">
       <h4 className="font-medium">Current Order</h4>
-      {order.map((orderItem) => (
-        <div
-          key={orderItem.menuItem.id}
-          className="flex justify-between items-center py-1"
-        >
-          <span>
-            {orderItem.menuItem.name} (x{orderItem.quantity})
-          </span>
-          <div>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => handleRemoveItem(orderItem.menuItem.id)}
-            >
-              <Minus className="w-4 h-4" />
-            </Button>
-            <Button
-              size="sm"
-              className="ml-2"
-              onClick={() => handleAddItem(orderItem.menuItem)}
-            >
-              <Plus className="w-4 h-4" />
-            </Button>
+      <section className="max-h-56 overflow-y-auto">
+        {order.map((orderItem) => (
+          <div
+            key={orderItem.menuItem.id}
+            className="flex justify-between items-center py-1"
+          >
+            <span>
+              {orderItem.menuItem.name} (x{orderItem.quantity})
+            </span>
+            <div>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleRemoveItem(orderItem.menuItem.id)}
+              >
+                <Minus className="w-4 h-4" />
+              </Button>
+              <Button
+                size="sm"
+                className="ml-2"
+                onClick={() => handleAddItem(orderItem.menuItem)}
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </section>
       <div className="font-bold mt-2">Total: ${totalOrderPrice.toFixed(2)}</div>
       <Dialog>
         <DialogTrigger>

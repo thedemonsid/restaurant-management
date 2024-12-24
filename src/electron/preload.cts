@@ -24,6 +24,7 @@ contextBridge.exposeInMainWorld("restaurant", {
     getOrders: (): Promise<any> => ipcRenderer.invoke("order:get-orders"),
     getOrderItems: (orderId: string): Promise<any> =>
       ipcRenderer.invoke("order:get-order-items", orderId),
+    printReceipt: (data: any) => ipcRenderer.invoke("order:print-receipt", data),
   },
   revenue: {
     getMonthlyRevenue: (year: number, month: number): Promise<any> =>
