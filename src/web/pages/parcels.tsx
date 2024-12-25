@@ -11,16 +11,20 @@ export default function Parcels() {
     const savedParcels = localStorage.getItem("parcels");
     return savedParcels ? JSON.parse(savedParcels) : initialParcels;
   });
-  const [newReceipient, setNewRecipient] = useState("Customer ");
+  const [newReceipient, setNewRecipient] = useState("");
   useEffect(() => {
     localStorage.setItem("parcels", JSON.stringify(parcels));
   }, [parcels]);
 
   const [selectedParcel, setSelectedParcel] = useState<Parcel | null>(null);
   console.log(selectedParcel);
-  
+
   const handleAddParcel = () => {
-    if (newReceipient) {
+    //Also check if the newRecipient is unique
+
+    let flag = parcels.some((parcel) => parcel.recipient === newReceipient);
+
+    if (newReceipient.length > 0 && !flag) {
       setParcels([
         ...parcels,
         {
