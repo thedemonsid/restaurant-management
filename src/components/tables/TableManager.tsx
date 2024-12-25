@@ -49,7 +49,14 @@ const TableManager: React.FC<TableManagerProps> = ({
     }
     fetchMenuItems();
   }, []);
-
+  useEffect(() => {
+    if (table.order.length > 0 && table.status !== "occupied") {
+      handleStatusChange("occupied");
+    }
+    if (table.order.length === 0 && table.status === "occupied") {
+      handleStatusChange("available");
+    }
+  }, [table.order]);
   const handleOrderSubmit = async ({
     amountPaid,
     paymentMethod,
