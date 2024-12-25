@@ -2,12 +2,23 @@ import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MenuItem } from "@/types/index";
-
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 const Menu = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [newItem, setNewItem] = useState({ name: "", price: "" });
   const [filteredItems, setFilteredItems] = useState<MenuItem[]>([]);
-
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState(1);
   useEffect(() => {
     async function fetchMenuItems() {
       const items = await window.restaurant.menu.getItems();
@@ -47,8 +58,23 @@ const Menu = () => {
     setNewItem({ name: "", price: "" });
   };
 
-  const handleUpdateItem = (id: number) => {
-    console.log(`Updated item with ID: ${id}`);
+  const handleUpdateItem = async (id: number, name: string, price: number) => {
+    const updatedItem = { id, name, price };
+    updatedItem.name = updatedItem.name.trim();
+    updatedItem.price = parseFloat(updatedItem.price.toFixed(2));
+    try {
+      await window.restaurant.menu.updateMenuItem(updatedItem);
+      const updatedItems = menuItems.map((item) => {
+        if (item.id === id) {
+          return updatedItem;
+        }
+        return item;
+      });
+      setMenuItems(updatedItems);
+      alert(`Menu item updated successfully: ${JSON.stringify(updatedItem)}`);
+    } catch (error) {
+      console.error("Failed to update menu item:", error);
+    }
   };
 
   return (
@@ -93,7 +119,7 @@ const Menu = () => {
               <th className="py-2 min-w-[150px] max-w-[300px]">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="max-h-40">
             {filteredItems.map((item, index) => (
               <tr key={item.id} className="border-t">
                 <td className="py-2 text-center min-w-[100px] max-w-[200px]">
@@ -106,9 +132,80 @@ const Menu = () => {
                   ${item.price.toFixed(2)}
                 </td>
                 <td className="py-2 text-center min-w-[150px] max-w-[300px]">
-                  <Button onClick={() => handleUpdateItem(item.id)}>
-                    Update
-                  </Button>
+                  <Dialog
+                    onOpenChange={(isOpen) => {
+                      if (!isOpen) {
+                        setName("");
+                        setPrice(1);
+                      }
+                      if (isOpen) {
+                        setName(item.name);
+                        setPrice(item.price);
+                      }
+                    }}
+                  >
+                    <DialogTrigger asChild>
+                      <Button>Update</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Edit MenuItem</DialogTitle>
+                        <DialogDescription>
+                          Update the name and price of the menu item
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="name" className="text-right">
+                            Name
+                          </Label>
+                          <Input
+                            id="name"
+                            value={name}
+                            className="col-span-3"
+                            onChange={(e) => setName(e.target.value)}
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="price" className="text-right">
+                            Price
+                          </Label>
+                          <Input
+                            id="price"
+                            type="number"
+                            min={1}
+                            value={price}
+                            className="col-span-3"
+                            onChange={(e) => setPrice(parseInt(e.target.value))}
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <DialogClose>
+                          <Button
+                            type="submit"
+                            onClick={() => {
+                              if (
+                                name.trim() === item.name &&
+                                price === item.price
+                              ) {
+                                alert("No changes made to the menu item");
+                                return;
+                              }
+                              if (name !== "" && price > 0) {
+                                handleUpdateItem(item.id, name, price);
+                              }
+                            }}
+                            disabled={
+                              name.trim() === item.name.trim() && price === item.price
+                            }
+                          >
+                            Save changes
+                          </Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </td>
               </tr>
             ))}
