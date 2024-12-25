@@ -177,7 +177,7 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
           />
         </div>
         <div className="h-48 overflow-y-auto">
-          {filteredMenuItems.map((item,index) => (
+          {filteredMenuItems.map((item, index) => (
             <div
               key={item.id}
               ref={index === highlightedIndex ? highlightedItemRef : null}
