@@ -20,7 +20,7 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-  const [highlightedIndex, setHighlightedIndex] = useState(1);
+  const [highlightedIndex, setHighlightedIndex] = useState(0);
   const highlightedItemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
