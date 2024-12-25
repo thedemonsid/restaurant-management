@@ -11,7 +11,7 @@ export default function Parcels() {
     const savedParcels = localStorage.getItem("parcels");
     return savedParcels ? JSON.parse(savedParcels) : initialParcels;
   });
-  const [newReceipient, setNewRecipient] = useState("");
+  const [newReceipient, setNewRecipient] = useState("Customer ");
   useEffect(() => {
     localStorage.setItem("parcels", JSON.stringify(parcels));
   }, [parcels]);
@@ -49,6 +49,7 @@ export default function Parcels() {
             placeholder="Customer Name"
             className="w-full"
             value={newReceipient}
+            autoFocus
             onChange={(e) => setNewRecipient(e.target.value)}
           />
           <Button type="submit">Add Parcel</Button>

@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Plus } from "lucide-react";
 import { Parcel, MenuItem } from "@/types/index";
 import OrderSummary from "@/components/parcels/OrderSummary";
+import { cn } from "@/lib/utils";
 
 interface ParcelManagerProps {
   parcel: Parcel;
@@ -19,7 +20,17 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [highlightedIndex, setHighlightedIndex] = useState(1);
+  const highlightedItemRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (highlightedItemRef.current) {
+      highlightedItemRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [highlightedIndex]);
   useEffect(() => {
     async function fetchMenuItems() {
       const menuItems = await window.restaurant.menu.getItems();
@@ -39,7 +50,6 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
     amountPaid: number;
     paymentMethod: string;
   }) => {
-    console.log("Order submitted", amountPaid, paymentMethod, parcel.order);
     const createdOrder = await window.restaurant.order.addOrder(
       {
         tableName: parcel.recipient, //! This is the Customer Name
@@ -102,18 +112,53 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
     setParcels(updatedParcels);
     // setSelectedParcel(updatedParcels.find((p) => p.id === parcel.id) || null);
   };
+  const filteredMenuById = menuItems.filter((item) => {
+    // want to check if the search term is number
+    // if it is number then we will search by id
+    // then we will add the condition to check if the id  is in the search term
 
-  const filteredMenuItems = menuItems.filter((item) =>
+    if (!isNaN(Number(searchTerm))) {
+      return item.id.toString().includes(searchTerm);
+    }
+  });
+  const filteredMenuByName = menuItems.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const filterMenuItemsByPrice = menuItems.filter((item) =>
+    item.price.toString().includes(searchTerm)
+  );
+  const filteredMenuItems = Array.from(
+    new Set([
+      ...filteredMenuById,
+      ...filteredMenuByName,
+      ...filterMenuItemsByPrice,
+    ])
+  ).sort((a, b) => a.id - b.id);
 
   const totalOrderPrice = parcel.order.reduce(
     (total, orderItem) => total + orderItem.menuItem.price * orderItem.quantity,
     0
   );
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedIndex((prevIndex) =>
+        Math.min(prevIndex + 1, filteredMenuItems.length - 1)
+      );
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      handleAddItem(filteredMenuItems[highlightedIndex]);
+    }
+  };
 
   return (
-    <SheetContent side="right" className="w-[400px] sm:w-[540px] overflow-y-auto">
+    <SheetContent
+      side="right"
+      className="w-[400px] sm:w-[540px] overflow-y-auto"
+    >
       <SheetHeader>
         <SheetTitle>Manage Parcel {parcel.recipient}</SheetTitle>
       </SheetHeader>
@@ -123,17 +168,29 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
           <Input
             placeholder="Search menu items..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setHighlightedIndex(0);
+            }}
+            autoFocus
+            onKeyDown={handleKeyDown}
           />
         </div>
         <div className="h-48 overflow-y-auto">
-          {filteredMenuItems.map((item) => (
+          {filteredMenuItems.map((item,index) => (
             <div
               key={item.id}
-              className="flex justify-between items-center py-2"
+              ref={index === highlightedIndex ? highlightedItemRef : null}
+              className={cn(
+                "flex justify-between items-center py-2",
+                // item.id can be any number so we cant gurantee it will match with highlightedIndex
+                highlightedIndex === filteredMenuItems.indexOf(item)
+                  ? "bg-green-100 rounded-sm px-2"
+                  : ""
+              )}
             >
               <span>
-                {item.name} - ${item.price.toFixed(2)}
+                {item.id}. {item.name} - ₹{item.price}
               </span>
               <Button size="sm" onClick={() => handleAddItem(item)}>
                 <Plus className="w-4 h-4" />

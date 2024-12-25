@@ -63,6 +63,7 @@ const Menu = () => {
             type="text"
             name="name"
             value={newItem.name}
+            autoFocus
             onChange={handleInputChange}
             required
           />
