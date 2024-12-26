@@ -135,7 +135,7 @@ ipcMain.handle("expense:update-expense", async (event, expense) => {
     throw error;
   }
 });
-ipcMain.handle("expense:delete-expense", async (event, id) => {
+ipcMain.handle("expense:remove-expense", async (event, id) => {
   try {
     return await RestaurantDB.deleteExpense(id);
   } catch (error) {

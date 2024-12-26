@@ -1,103 +1,67 @@
-import React, { useEffect, useState } from "react";
-import { format } from "date-fns";
-import { StatsCard } from "@/components/stats-card";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { CalendarIcon } from "lucide-react";
+import { useState, useEffect } from "react";
 
-const Dashboard: React.FC = () => {
-  // const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [dailyRevenue, setDailyRevenue] = useState<number>(0);
-  const [monthlyRevenue, setMonthlyRevenue] = useState<number>(0);
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-  // useEffect(() => {
-  //   async function fetchDashboardData() {
-
-  //   }
-
-  //   fetchDashboardData();
-  // }, []);
+const Dashboard = () => {
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  const [totalExpenses, setTotalExpenses] = useState(0);
+  const [netProfit, setNetProfit] = useState(0);
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [recentExpenses, setRecentExpenses] = useState([]);
 
   useEffect(() => {
-    async function fetchDailyRevenue(date: Date) {
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      const fetchedDailyRevenue =
-        await window.restaurant.revenue.getDailyRevenue(year, month, day);
-      setDailyRevenue(fetchedDailyRevenue);
+    async function fetchData() {
+      const orders = await window.restaurant.order.getOrders();
+      const expenses = await window.restaurant.expenses.getExpenses();
+
+      const totalRevenue = orders.reduce(
+        (sum, order) => sum + order.amountPaid,
+        0
+      );
+      const totalExpenses = expenses.reduce(
+        (sum, expense) => sum + expense.price,
+        0
+      );
+      const netProfit = totalRevenue - totalExpenses;
+
+      setTotalRevenue(totalRevenue);
+      setTotalExpenses(totalExpenses);
+      setNetProfit(netProfit);
+      setRecentOrders(orders.slice(-5));
+      setRecentExpenses(expenses.slice(-5));
     }
 
-    if (selectedDate) {
-      fetchDailyRevenue(selectedDate);
-    }
-  }, [selectedDate]);
-
-  useEffect(() => {
-    async function fetchMonthlyRevenue(year: number, month: number) {
-      const fetchedMonthlyRevenue =
-        await window.restaurant.revenue.getMonthlyRevenue(year, month);
-      setMonthlyRevenue(fetchedMonthlyRevenue);
-    }
-
-    const currentDate = new Date();
-    fetchMonthlyRevenue(currentDate.getFullYear(), currentDate.getMonth() + 1);
+    fetchData();
   }, []);
 
-
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatsCard
-          title="Monthly Revenue"
-          value={`₹${monthlyRevenue}`}
-          subtitle={`Revenue for ${format(new Date(), "MMMM yyyy")}`}
-          icon={<i className="fas fa-calendar-alt"></i>}
-        />
-        <StatsCard
-          title="Selected Date Revenue"
-          value={`₹${dailyRevenue}`}
-          subtitle={`Revenue for ${
-            selectedDate ? format(selectedDate, "PPP") : "selected date"
-          }`}
-          icon={<i className="fas fa-calendar"></i>}
-        />
-      </div>
-      <div className="mb-4">
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant={"outline"}
-              className={`w-[280px] justify-start text-left font-normal ${
-                !selectedDate && "text-muted-foreground"
-              }`}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {selectedDate ? (
-                format(selectedDate, "PPP")
-              ) : (
-                <span>Pick a date</span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <Calendar
-              mode="single"
-              //@ts-ignore //Todo: Fix this
-              selected={selectedDate}
-              //@ts-ignore //Todo: Fix this
-              onSelect={setSelectedDate}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Total Revenue</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>₹{totalRevenue.toFixed(2)}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Total Expenses</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>₹{totalExpenses.toFixed(2)}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Net Profit</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>₹{netProfit.toFixed(2)}</p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

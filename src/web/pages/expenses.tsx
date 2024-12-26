@@ -37,7 +37,9 @@ const ExpensesManager = () => {
 
   useEffect(() => {
     async function fetchExpenses() {
-      const items = await window.restaurant.expenses.getExpensesForFullDay(selectedDate ? selectedDate.toISOString() : new Date().toISOString());
+      const items = await window.restaurant.expenses.getExpensesForFullDay(
+        selectedDate ? selectedDate.toISOString() : new Date().toISOString()
+      );
       setExpenses(items);
     }
     fetchExpenses();
@@ -227,11 +229,6 @@ const ExpensesManager = () => {
                   <td className="py-2 text-center min-w-[150px] max-w-[300px]">
                     <Dialog
                       onOpenChange={(isOpen) => {
-                        if (!isOpen) {
-                          setName("");
-                          setPrice(1);
-                          setDoneBy("");
-                        }
                         if (isOpen) {
                           setName(item.name);
                           setPrice(item.price);
@@ -289,6 +286,48 @@ const ExpensesManager = () => {
                           </div>
                         </div>
                         <DialogFooter>
+                          <div>
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button variant={"destructive"}>Delete</Button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>Delete Expense</DialogTitle>
+                                  <DialogDescription>
+                                    Are you sure you want to delete the expense?
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <div>
+                                  <p>
+                                    Name: {item.name} <br />
+                                    Price: ₹{item.price} <br />
+                                    Done By: {item.doneBy} <br />
+                                  </p>
+                                </div>
+                                <DialogFooter>
+                                  <DialogClose>
+                                    <Button
+                                      variant={"destructive"}
+                                      type="submit"
+                                      onClick={async () => {
+                                        await window.restaurant.expenses.deleteExpense(
+                                          item.id
+                                        );
+                                        const updatedItems = expenses.filter(
+                                          (i) => i.id !== item.id
+                                        );
+                                        //@ts-ignore
+                                        setExpenses(updatedItems);
+                                      }}
+                                    >
+                                      Confirm
+                                    </Button>
+                                  </DialogClose>
+                                </DialogFooter>
+                              </DialogContent>
+                            </Dialog>
+                          </div>
                           <DialogClose>
                             <Button
                               type="submit"
