@@ -1,3 +1,10 @@
+import {
+  addExpense,
+  deleteExpense,
+  getExpenses,
+  getExpensesForFullDay,
+  updateExpense,
+} from "./lib/expenses.js";
 import { initDatabase } from "./lib/init.js";
 import {
   addMenuItem,
@@ -6,7 +13,7 @@ import {
   updateMenuItem,
 } from "./lib/menuItem.js";
 import { addOrder, getOrders, getOrderItems } from "./lib/order.js";
-import type { MenuItem, Order } from "./types.js";
+import type { Expense, MenuItem, Order } from "./types.js";
 
 class RestaurantDB {
   private db = initDatabase();
@@ -73,6 +80,27 @@ class RestaurantDB {
 
     return dailyRevenue;
   }
+  //! Expense related functions
+  public addExpense(expense: Omit<Expense, "id" | "createdAt" | "updatedAt">) {
+    return addExpense(this.db, expense);
+  }
+
+  public getExpenses() {
+    return getExpenses(this.db);
+  }
+
+  public updateExpense(expense: Expense) {
+    return updateExpense(this.db, expense);
+  }
+
+  public deleteExpense(id: number) {
+    return deleteExpense(this.db, id);
+  }
+  public getExpensesForFullDay(date: string) {
+    return getExpensesForFullDay(this.db, date);
+  }
+
+  //! Close the database connection
   public close(): void {
     this.db.close();
   }

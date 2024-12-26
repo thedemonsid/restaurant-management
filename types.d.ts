@@ -20,5 +20,13 @@ interface Window {
         day: number
       ) => Promise<any>;
     };
+    expenses: {
+      addExpense: (expense: any) => Promise<void>;
+      getExpenses: () => Promise<any>;
+      deleteExpense: (id: number) => Promise<void>;
+      updateExpense: (expense: any) => Promise<void>;
+      getExpensesByDate: (date: string) => Promise<any>;
+      getExpensesForFullDay: (date: string) => Promise<any>;
+    };
   };
 }

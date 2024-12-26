@@ -97,9 +97,9 @@ ipcMain.handle(
     }
   }
 );
-//* Printer 
+//* Printer
 
-ipcMain.handle('order:print-receipt', async (event, data) => {
+ipcMain.handle("order:print-receipt", async (event, data) => {
   try {
     await printReceipt(data);
     return { success: true };
@@ -107,5 +107,47 @@ ipcMain.handle('order:print-receipt', async (event, data) => {
     console.error("Failed to print receipt:", error);
     //@ts-ignore
     return { success: false, error: error.message };
+  }
+});
+
+// * Expenses
+ipcMain.handle("expense:add-expense", async (event, expense) => {
+  try {
+    return await RestaurantDB.addExpense(expense);
+  } catch (error) {
+    console.error("Failed to add expense:", error);
+    throw error;
+  }
+});
+ipcMain.handle("expense:get-expenses", async () => {
+  try {
+    return await RestaurantDB.getExpenses();
+  } catch (error) {
+    console.error("Failed to get expenses:", error);
+    throw error;
+  }
+});
+ipcMain.handle("expense:update-expense", async (event, expense) => {
+  try {
+    return await RestaurantDB.updateExpense(expense);
+  } catch (error) {
+    console.error("Failed to update expense:", error);
+    throw error;
+  }
+});
+ipcMain.handle("expense:delete-expense", async (event, id) => {
+  try {
+    return await RestaurantDB.deleteExpense(id);
+  } catch (error) {
+    console.error("Failed to delete expense:", error);
+    throw error;
+  }
+});
+ipcMain.handle("expense:get-for-full-day", async (event, date) => {
+  try {
+    return await RestaurantDB.getExpensesForFullDay(date);
+  } catch (error) {
+    console.error("Failed to get expenses for full day:", error);
+    throw error;
   }
 });

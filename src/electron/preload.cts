@@ -24,12 +24,26 @@ contextBridge.exposeInMainWorld("restaurant", {
     getOrders: (): Promise<any> => ipcRenderer.invoke("order:get-orders"),
     getOrderItems: (orderId: string): Promise<any> =>
       ipcRenderer.invoke("order:get-order-items", orderId),
-    printReceipt: (data: any) => ipcRenderer.invoke("order:print-receipt", data),
+    printReceipt: (data: any) =>
+      ipcRenderer.invoke("order:print-receipt", data),
   },
   revenue: {
     getMonthlyRevenue: (year: number, month: number): Promise<any> =>
       ipcRenderer.invoke("revenue:get-monthly", year, month),
     getDailyRevenue: (year: number, month: number, day: number): Promise<any> =>
       ipcRenderer.invoke("revenue:get-daily", year, month, day),
+  },
+  expenses: {
+    addExpense: (expense: any) =>
+      ipcRenderer.invoke("expense:add-expense", expense),
+    getExpenses: (): Promise<any> => ipcRenderer.invoke("expense:get-expenses"),
+    deleteExpense: (id: number) =>
+      ipcRenderer.invoke("expense:remove-expense", id),
+    updateExpense: (expense: any) =>
+      ipcRenderer.invoke("expense:update-expense", expense),
+    getExpensesByDate: (date: string) =>
+      ipcRenderer.invoke("expense:get-by-date", date),
+    getExpensesForFullDay: (date: string) =>
+      ipcRenderer.invoke("expense:get-for-full-day", date),
   },
 });

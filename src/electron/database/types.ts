@@ -18,3 +18,12 @@ export interface Order {
 export interface DatabaseError extends Error {
   code?: string;
 }
+
+export interface Expense{
+  id: number;
+  name: string;
+  price: number;
+  doneBy: string;
+  createdAt: string;
+  updatedAt: string;
+}

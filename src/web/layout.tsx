@@ -4,6 +4,7 @@ import {
   Utensils,
   ClipboardList,
   Menu,
+  IndianRupee,
 } from "lucide-react";
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -25,7 +26,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             }`}
           >
             <LayoutGrid className="h-4 w-4" />
-            <span>Dashboard</span>
+            <span>Dashboard / डॅशबोर्ड</span>
           </Link>
           <Link
             to="/tables"
@@ -36,7 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             }`}
           >
             <Utensils className="h-4 w-4" />
-            <span>Tables</span>
+            <span>Tables / टेबल</span>
           </Link>
           <Link
             to="/parcels"
@@ -47,7 +48,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             }`}
           >
             <ClipboardList className="h-4 w-4" />
-            <span>Parcels</span>
+            <span>Parcels / पार्सल्स</span>
           </Link>
           <Link
             to="/orders"
@@ -58,7 +59,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             }`}
           >
             <ClipboardList className="h-4 w-4" />
-            <span>Orders</span>
+            <span>Orders / ऑर्डर</span>
           </Link>
           <Link
             to="/menu"
@@ -69,30 +70,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
             }`}
           >
             <Menu className="h-4 w-4" />
-            <span>Menu</span>
-          </Link>
-          {/* <Link
-            to="/staff"
-            className={`flex items-center space-x-3 rounded-lg px-3 py-2 text-sm ${
-              location.pathname === "/staff"
-                ? "bg-secondary"
-                : "hover:bg-secondary/50"
-            }`}
-          >
-            <Users className="h-4 w-4" />
-            <span>Staff</span>
+            <span>Menu / मेनू</span>
           </Link>
           <Link
-            to="/settings"
+            to="/expenses"
             className={`flex items-center space-x-3 rounded-lg px-3 py-2 text-sm ${
-              location.pathname === "/settings"
+              location.pathname === "/expenses"
                 ? "bg-secondary"
                 : "hover:bg-secondary/50"
             }`}
           >
-            <Settings className="h-4 w-4" />
-            <span>Settings</span>
-          </Link> */}
+            <IndianRupee className="h-4 w-4" />
+            <span>Expenses / खर्च</span>
+          </Link>
         </nav>
       </div>
       <div className="flex-1 overflow-auto">
