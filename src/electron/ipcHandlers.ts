@@ -151,3 +151,11 @@ ipcMain.handle("expense:get-for-full-day", async (event, date) => {
     throw error;
   }
 });
+ipcMain.handle("expense:get-monthly", async (event, year, month) => {
+  try {
+    return await RestaurantDB.getMonthlyExpenses(year, month);
+  } catch (error) {
+    console.error("Failed to get monthly expenses:", error);
+    throw error;
+  }
+});

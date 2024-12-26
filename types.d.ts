@@ -27,6 +27,7 @@ interface Window {
       updateExpense: (expense: any) => Promise<void>;
       getExpensesByDate: (date: string) => Promise<any>;
       getExpensesForFullDay: (date: string) => Promise<any>;
+      getMonthlyExpenses: (year: number, month: number) => Promise<any>;
     };
   };
 }

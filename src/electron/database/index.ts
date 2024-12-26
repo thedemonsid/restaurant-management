@@ -99,6 +99,22 @@ class RestaurantDB {
   public getExpensesForFullDay(date: string) {
     return getExpensesForFullDay(this.db, date);
   }
+  public async getMonthlyExpenses(year: number, month: number) {
+    const expenses = await getExpenses(this.db);
+    const monthlyExpenses = expenses.filter((expense) => {
+      const expenseDate = new Date(expense.createdAt);
+      return (
+        expenseDate.getFullYear() === year &&
+        expenseDate.getMonth() === month - 1
+      );
+    });
+
+    const totalMonthlyExpenses = monthlyExpenses.reduce((total, expense) => {
+      return total + expense.price;
+    }, 0);
+
+    return totalMonthlyExpenses;
+  }
 
   //! Close the database connection
   public close(): void {

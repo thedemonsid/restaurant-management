@@ -64,15 +64,26 @@ export function getExpensesForFullDay(db: DatabaseType, date: string) {
     SELECT * FROM "Expenses"
     WHERE createdAt BETWEEN @startOfDay AND @endOfDay
   `);
-  return stmt.all({ startOfDay: startOfDay.toISOString(), endOfDay: endOfDay.toISOString() }) as Expense[];
+  return stmt.all({
+    startOfDay: startOfDay.toISOString(),
+    endOfDay: endOfDay.toISOString(),
+  }) as Expense[];
 }
+// //Function to get expenses of a particular month
+// export function getExpensesByMonthAndYear(db: DatabaseType, year: string, month: string) {
+//   const stmt = db.prepare(`
+//     SELECT * FROM "Expenses"
+//     WHERE strftime('%Y-%m', createdAt) = @yearMonth
+//   `);
+//   return stmt.all({ yearMonth: `${year}-${month}` }) as Expense[];
+// }
 
-
+// Function to delete an expense
 export function deleteExpense(db: DatabaseType, id: number) {
   const stmt = db.prepare(`
     DELETE FROM "Expenses"
     WHERE id = @id
   `);
- 
+
   return stmt.run({ id });
 }

@@ -45,5 +45,7 @@ contextBridge.exposeInMainWorld("restaurant", {
       ipcRenderer.invoke("expense:get-by-date", date),
     getExpensesForFullDay: (date: string) =>
       ipcRenderer.invoke("expense:get-for-full-day", date),
+    getMonthlyExpenses: (year: number, month: number) =>
+      ipcRenderer.invoke("expense:get-monthly", year, month),
   },
 });
