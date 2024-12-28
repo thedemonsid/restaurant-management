@@ -101,7 +101,8 @@ ipcMain.handle(
 
 ipcMain.handle("order:print-receipt", async (event, data) => {
   try {
-    await printReceipt(data);
+    const restaurantInfo = await RestaurantDB.getRestaurantInfo();
+    await printReceipt(data, restaurantInfo.name, restaurantInfo.address);
     return { success: true };
   } catch (error) {
     console.error("Failed to print receipt:", error);
@@ -156,6 +157,24 @@ ipcMain.handle("expense:get-monthly", async (event, year, month) => {
     return await RestaurantDB.getMonthlyExpenses(year, month);
   } catch (error) {
     console.error("Failed to get monthly expenses:", error);
+    throw error;
+  }
+});
+
+// * Restaurant Info
+ipcMain.handle("restaurant:get-info", async () => {
+  try {
+    return await RestaurantDB.getRestaurantInfo();
+  } catch (error) {
+    console.error("Failed to get restaurant info:", error);
+    throw error;
+  }
+});
+ipcMain.handle("restaurant:update-info", async (event, info) => {
+  try {
+    return await RestaurantDB.updateRestaurantInfo(info);
+  } catch (error) {
+    console.error("Failed to update restaurant info:", error);
     throw error;
   }
 });

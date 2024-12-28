@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron';
+import { BrowserWindow } from "electron";
 
 interface ReceiptItem {
   name: string;
@@ -13,7 +13,11 @@ interface ReceiptData {
   total: number;
 }
 
-export async function printReceipt(data: ReceiptData) {
+export async function printReceipt(
+  data: ReceiptData,
+  restaurantName: string,
+  restaurantAddress: string
+) {
   const printWindow = new BrowserWindow({
     width: 800,
     height: 400,
@@ -61,24 +65,32 @@ export async function printReceipt(data: ReceiptData) {
           }
         </style>
       <body>
-        <h1>समृद्धी रेस्टॉरंट - शुद्ध शाकाहारी</h1>
-        <p>कोंढेज चौक, जेऊर (413202) नगर टेंभुर्णी महामार्ग</p>
+        <h1>${restaurantName}</h1>
+        <p>${restaurantAddress}</p>
         <hr>
         <p>Order: ${data.orderId}</p>
         <p>Date: ${data.date}</p>
         <hr>
-        ${data.items.map(item => `
-          <p>${item.name} * ${item.quantity} - ₹${item.price} - ₹${item.price * item.quantity} </p>
-        `).join('')}
+        ${data.items
+          .map(
+            (item) => `
+          <p>${item.name} * ${item.quantity} - ₹${item.price} - ₹${
+              item.price * item.quantity
+            } </p>
+        `
+          )
+          .join("")}
         <hr>
         <p>Total: ₹${data.total}</p>
       </body>
     </html>
   `;
 
-  printWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(receiptHTML)}`);
+  printWindow.loadURL(
+    `data:text/html;charset=utf-8,${encodeURIComponent(receiptHTML)}`
+  );
 
-  printWindow.webContents.on('did-finish-load', () => {
+  printWindow.webContents.on("did-finish-load", () => {
     printWindow.webContents.print({}, (success, errorType) => {
       if (!success) console.error(`Failed to print: ${errorType}`);
       printWindow.close();

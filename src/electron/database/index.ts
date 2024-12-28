@@ -1,3 +1,4 @@
+import { get } from "http";
 import {
   addExpense,
   deleteExpense,
@@ -14,6 +15,10 @@ import {
 } from "./lib/menuItem.js";
 import { addOrder, getOrders, getOrderItems } from "./lib/order.js";
 import type { Expense, MenuItem, Order } from "./types.js";
+import {
+  getRestaurantInfo,
+  updateRestaurantInfo,
+} from "../printer/restaurantInfo.js";
 
 class RestaurantDB {
   private db = initDatabase();
@@ -115,7 +120,23 @@ class RestaurantDB {
 
     return totalMonthlyExpenses;
   }
-
+  //* Restaurant info
+  public async getRestaurantInfo() {
+    const restaurantInfo = getRestaurantInfo();
+    return restaurantInfo;
+  }
+  public async updateRestaurantInfo(restaurantInfo: {
+    name: string;
+    address: string;
+    phone: string[];
+  }): Promise<boolean> {
+    const response = await updateRestaurantInfo(
+      restaurantInfo.name,
+      restaurantInfo.address,
+      restaurantInfo.phone
+    );
+    return response;
+  }
   //! Close the database connection
   public close(): void {
     this.db.close();

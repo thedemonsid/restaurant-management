@@ -29,5 +29,17 @@ interface Window {
       getExpensesForFullDay: (date: string) => Promise<any>;
       getMonthlyExpenses: (year: number, month: number) => Promise<any>;
     };
+    restaurant: {
+      getRestaurantInfo: () => Promise<{
+        name: string;
+        address: string;
+        phone: string[];
+      }>;
+      updateRestaurantInfo: (restaurantInfo: {
+        name: string;
+        address: string;
+        phone: string[];
+      }) => Promise<boolean>;
+    };
   };
 }

@@ -5,6 +5,8 @@ import {
   ClipboardList,
   Menu,
   IndianRupee,
+  Settings,
+  Bike,
 } from "lucide-react";
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -47,7 +49,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 : "hover:bg-secondary/50"
             }`}
           >
-            <ClipboardList className="h-4 w-4" />
+            <Bike className="h-4 w-4" />
             <span>Parcels / पार्सल्स</span>
           </Link>
           <Link
@@ -82,6 +84,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
           >
             <IndianRupee className="h-4 w-4" />
             <span>Expenses / खर्च</span>
+          </Link>
+          <Link
+            to="/settings"
+            className={`flex items-center space-x-3 rounded-lg px-3 py-2 text-sm ${
+              location.pathname === "/settings"
+                ? "bg-secondary"
+                : "hover:bg-secondary/50"
+            }`}
+          >
+            <Settings className="h-4 w-4" />
+            <span>Settings / सेटिंग्स</span>
           </Link>
         </nav>
       </div>

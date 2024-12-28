@@ -18,3 +18,10 @@ export function getUIPath() {
 export function getAssetPath() {
   return path.join(app.getAppPath(), isDev() ? "." : "..", "/src/assets");
 }
+export function getRestaurantInfoPath() {
+  return path.join(
+    app.getAppPath(),
+    isDev() ? "." : "..",
+    "/dist-electron/restaurantInfo.json"
+  );
+}

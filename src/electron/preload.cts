@@ -48,4 +48,10 @@ contextBridge.exposeInMainWorld("restaurant", {
     getMonthlyExpenses: (year: number, month: number) =>
       ipcRenderer.invoke("expense:get-monthly", year, month),
   },
+  restaurant: {
+    getRestaurantInfo: (): Promise<any> =>
+      ipcRenderer.invoke("restaurant:get-info"),
+    updateRestaurantInfo: (info: any) =>
+      ipcRenderer.invoke("restaurant:update-info", info),
+  },
 });

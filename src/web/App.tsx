@@ -7,6 +7,7 @@ import Menu from "./pages/Menu";
 import Orders from "./pages/orders";
 import Parcels from "./pages/parcels";
 import Expenses from "./pages/expenses";
+import SettingsPage from "./pages/settings";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/orders" element={<Orders></Orders>} />
           <Route path="/parcels" element={<Parcels></Parcels>} />
           <Route path="/expenses" element={<Expenses></Expenses>} />
+          <Route path="/settings" element={<SettingsPage></SettingsPage>} />
           <Route path="*" element={<h1>Page Not Found</h1>} />
           {/* Add other routes as needed */}
         </Routes>
