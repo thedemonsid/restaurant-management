@@ -1,7 +1,16 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
+import { format } from "date-fns";
 const CardComponent = ({
   title,
   value,
@@ -31,7 +40,6 @@ const SelectComponent = ({
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }) => (
   <div className="flex flex-col">
-    <label className="mb-2">{label}</label>
     <select
       className="p-2 border border-gray-300 rounded-md"
       onChange={onChange}
@@ -49,14 +57,36 @@ const SelectComponent = ({
 const Dashboard = () => {
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
-  const [netProfit, setNetProfit] = useState(0);
-  const [monthlyRevenue, setMonthlyRevenue] = useState(0);
-  const [monthlyExpenses, setMonthlyExpenses] = useState(0);
   const [selectedMonth, setSelectedMonth] = useState(0);
   const [selectedYear, setSelectedYear] = useState(0);
   const [selectedMonthlyRevenue, setSelectedMonthlyRevenue] = useState(0);
   const [selectedMonthlyExpenses, setSelectedMonthlyExpenses] = useState(0);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDateRevenue, setSelectedDateRevenue] = useState(0);
+  const [selectedDateExpenses, setSelectedDateExpenses] = useState(0);
 
+  const fetchSelectedDateData = async () => {
+    const year = selectedDate.getFullYear();
+    const month = selectedDate.getMonth() + 1;
+    const day = selectedDate.getDate();
+    const dailyRevenue = await window.restaurant.revenue.getDailyRevenue(
+      year,
+      month,
+      day
+    );
+    const expenses = await window.restaurant.expenses.getExpensesForFullDay(
+      selectedDate.toISOString()
+    );
+    const dailyExpenses = expenses.reduce(
+      (sum: number, expense: { price: number }) => sum + expense.price,
+      0
+    );
+    setSelectedDateRevenue(dailyRevenue);
+    setSelectedDateExpenses(dailyExpenses);
+  };
+  useEffect(() => {
+    fetchSelectedDateData();
+  }, [selectedDate]);
   const fetchData = async () => {
     const orders = await window.restaurant.order.getOrders();
     const expenses = await window.restaurant.expenses.getExpenses();
@@ -69,27 +99,12 @@ const Dashboard = () => {
       (sum: number, expense: { price: number }) => sum + expense.price,
       0
     );
-    const netProfit = totalRevenue - totalExpenses;
-
     setTotalRevenue(totalRevenue);
     setTotalExpenses(totalExpenses);
-    setNetProfit(netProfit);
   };
-
-  const fetchMonthlyData = async (year: number, month: number) => {
-    const monthlyRevenue = await window.restaurant.revenue.getMonthlyRevenue(
-      year,
-      month
-    );
-    const monthlyExpenses = await window.restaurant.expenses.getMonthlyExpenses(
-      year,
-      month
-    );
-
-    setMonthlyRevenue(monthlyRevenue);
-    setMonthlyExpenses(monthlyExpenses);
-  };
-
+  useEffect(() => {
+    fetchData();
+  }, []);
   const fetchSelectedMonthlyData = async () => {
     if (!selectedMonth || !selectedYear) return;
 
@@ -105,13 +120,6 @@ const Dashboard = () => {
     setSelectedMonthlyRevenue(monthlyRevenue);
     setSelectedMonthlyExpenses(monthlyExpenses);
   };
-
-  useEffect(() => {
-    fetchData();
-    const year = new Date().getFullYear();
-    const month = new Date().getMonth() + 1;
-    fetchMonthlyData(year, month);
-  }, []);
 
   useEffect(() => {
     fetchSelectedMonthlyData();
@@ -149,36 +157,69 @@ const Dashboard = () => {
           />
           <CardComponent
             title="Net Profit"
-            value={`₹${netProfit}`}
-            valueClass={netProfit > 0 ? "text-green-400" : "text-red-400"}
-          />
-        </div>
-        <h1 className="text-2xl font-bold mb-4">
-          {new Date().toLocaleString("default", { month: "long" })}{" "}
-          {new Date().getFullYear()}
-        </h1>
-        <div className="flex justify-between w-1/2 items-center gap-4">
-          <CardComponent
-            title="Monthly Revenue"
-            value={`₹${monthlyRevenue}`}
-            valueClass="text-green-400"
-          />
-          <CardComponent
-            title="Monthly Expenses"
-            value={`₹${monthlyExpenses}`}
-            valueClass="text-red-400"
-          />
-          <CardComponent
-            title="Monthly Net Profit"
-            value={`₹${monthlyRevenue - monthlyExpenses}`}
+            value={`₹${totalRevenue - totalExpenses}`}
             valueClass={
-              monthlyRevenue - monthlyExpenses > 0
+              totalRevenue - totalExpenses > 0
                 ? "text-green-400"
                 : "text-red-400"
             }
           />
         </div>
-        <h1 className="text-2xl font-bold mb-4">Select a month and year</h1>
+        <h1 className="text-2xl font-bold">
+          Daily Overview{" "}
+          <span className="text-pink-400">{selectedDate.toDateString()}</span>
+        </h1>
+        <div className="mb-4">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={"outline"}
+                className={`w-[280px] justify-start text-left font-normal ${
+                  !selectedDate && "text-muted-foreground"
+                }`}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {selectedDate ? (
+                  format(selectedDate, "PPP")
+                ) : (
+                  <span>Pick a date</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                mode="single"
+                //@ts-ignore
+                selected={selectedDate}
+                //@ts-ignore
+                onSelect={setSelectedDate}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+        <div className="flex justify-between w-1/2 items-center gap-4">
+          <CardComponent
+            title="Daily Revenue"
+            value={`₹${selectedDateRevenue}`}
+            valueClass="text-green-400"
+          />
+          <CardComponent
+            title="Daily Expenses"
+            value={`₹${selectedDateExpenses}`}
+            valueClass="text-red-400"
+          />
+          <CardComponent
+            title="Daily Net Profit"
+            value={`₹${selectedDateRevenue - selectedDateExpenses}`}
+            valueClass={
+              selectedDateRevenue - selectedDateExpenses > 0
+                ? "text-green-400"
+                : "text-red-400"
+            }
+          />
+        </div>
+        <h1 className="text-2xl font-bold">Monthly Revenue</h1>
         <div className="flex gap-4">
           <SelectComponent
             label="Month"
