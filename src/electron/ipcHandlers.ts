@@ -102,7 +102,12 @@ ipcMain.handle(
 ipcMain.handle("order:print-receipt", async (event, data) => {
   try {
     const restaurantInfo = await RestaurantDB.getRestaurantInfo();
-    await printReceipt(data, restaurantInfo.name, restaurantInfo.address);
+    await printReceipt(
+      data,
+      restaurantInfo.name,
+      restaurantInfo.address,
+      restaurantInfo.phone.join(", ")
+    );
     return { success: true };
   } catch (error) {
     console.error("Failed to print receipt:", error);

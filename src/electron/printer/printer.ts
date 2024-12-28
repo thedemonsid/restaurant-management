@@ -16,7 +16,8 @@ interface ReceiptData {
 export async function printReceipt(
   data: ReceiptData,
   restaurantName: string,
-  restaurantAddress: string
+  restaurantAddress: string,
+  restaurantPhone: string
 ) {
   const printWindow = new BrowserWindow({
     width: 800,
@@ -67,6 +68,7 @@ export async function printReceipt(
       <body>
         <h1>${restaurantName}</h1>
         <p>${restaurantAddress}</p>
+        <p>Phone: ${restaurantPhone}</p>
         <hr>
         <p>Order: ${data.orderId}</p>
         <p>Date: ${data.date}</p>
