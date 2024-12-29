@@ -40,11 +40,11 @@
     "linux": {
       "target": "AppImage",
       "category": "Utility",
-      "icon": "src/assets/restaurant.png"
+      "icon": "src/assets/meal.png"
     },
     "win": {
       "target": "NSIS",
-      "icon": "src/assets/restaurant.ico"
+      "icon": "src/assets/icon.png"
     }
   },
   "dependencies": {

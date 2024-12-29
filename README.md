@@ -1,21 +1,38 @@
 # Restaurant Management System - Samrudhi
 
 ## Description
+
 A comprehensive restaurant management system designed to streamline operations, enhance customer experience, and optimize resource management.
 
 ## Why?
+
 Managing a restaurant involves juggling multiple tasks, from taking orders,creating bills to managing inventory. This project aims to simplify these tasks by providing an integrated solution that addresses common challenges faced by restaurant managers.
 
-- [x] As a **member of a family that recently started a restaurant**, I have firsthand experience with the challenges of managing daily operations. 
-- [x] Tasks like **taking orders, creating bills, managing inventory, and ensuring customer satisfaction** can be overwhelming. 
-- [x] The Restaurant Management System - Samrudhi was developed to address these challenges. 
+- [x] As a **member of a family that recently started a restaurant**, I have firsthand experience with the challenges of managing daily operations.
+- [x] Tasks like **taking orders, creating bills, managing inventory, and ensuring customer satisfaction** can be overwhelming.
+- [x] The Restaurant Management System - Samrudhi was developed to address these challenges.
 - [x] It aims to **streamline operations, reduce manual errors, and enhance the dining experience**, providing a practical solution to real-world problems faced by my family and other restaurant owners.
 
 ## Why not use an existing solution?
-- [x] Existing solutions are  **expensive** and **complex**, making them unsuitable for my needs.
-- [x] They do not offer the **customization** and **flexibility** required to meet the unique needs of my family's restaurant. 
+
+- [x] Existing solutions are **expensive** and **complex**, making them unsuitable for my needs.
+- [x] They do not offer the **customization** and **flexibility** required to meet the unique needs of my family's restaurant.
+
+## How to install?
+
+### Windows :
+
+1. Download the necessary files from the following Google Drive link:
+   [Download from Google Drive](https://drive.google.com/your-google-drive-link)
+
+2. Extract the downloaded files to your desired location.
+
+3. Unzip the Folder
+
+4. Double Click on file named `restaurant-management-smarudhi Setup 0.0.0`
 
 ## Quick Start
+
 1. Clone the repository:
    ```sh
    git clone https://github.com/yourusername/restaurant-management-samrudhi.git
@@ -30,15 +47,18 @@ Managing a restaurant involves juggling multiple tasks, from taking orders,creat
    ```
 
 ## Usage
+
 - **Development**: Run `pnpm run dev` to start the development server.
-- **Build**: Run 
+- **Build**: Run
 
 pnpm run build
 
- to build the project for production.
+to build the project for production.
+
 - **Lint**: Run `pnpm run lint` to lint the codebase.
 
 ## Contributing
+
 Contributions are welcome! Please fork the repository and submit a pull request.
 
 For more details, refer to the CONTRIBUTING.md file.
