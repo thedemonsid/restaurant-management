@@ -1,12 +1,12 @@
 # Restaurant Management System - Samrudhi 👨‍🍳
 
-A comprehensive restaurant management system designed to streamline operations, enhance customer experience, and optimize resource management.
+A comprehensive and `free to use` restaurant management system designed to streamline operations, enhance customer experience, and optimize resource management.
 
 ## Why? 🤔
 
 Managing a restaurant involves juggling multiple tasks, from taking orders to creating bills and managing inventory. This project aims to simplify these tasks by providing an integrated solution that addresses common challenges faced by restaurant managers.
 
-- As a **member of a family that recently started a restaurant**, I have firsthand experience with the challenges of managing daily operations.
+- As a `member of a family that recently started a restaurant`, I have firsthand experience with the challenges of managing daily operations.
 - Tasks such as **taking orders, creating bills, managing inventory, and ensuring customer satisfaction** can be overwhelming.
 - The Restaurant Management System - Samrudhi was developed to address these challenges.
 - It aims to **streamline operations, reduce manual errors, and enhance the dining experience**, providing a practical solution to real-world problems faced by my family and other restaurant owners.
