@@ -7,7 +7,6 @@
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
-    "dist": "build",
     "dev": "pnpm run \"/^dev:.*/\"",
     "dev:react": "vite",
     "copy:json": "copyfiles -f src/electron/printer/restaurantInfo.json dist-electron",
