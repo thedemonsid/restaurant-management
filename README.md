@@ -1,21 +1,28 @@
-# Restaurant Management System - Samrudhi
+# Restaurant Management System - Samrudhi 👨‍🍳
+
 A comprehensive restaurant management system designed to streamline operations, enhance customer experience, and optimize resource management.
 
-## Why?
+## Why? 🤔
 
 Managing a restaurant involves juggling multiple tasks, from taking orders to creating bills and managing inventory. This project aims to simplify these tasks by providing an integrated solution that addresses common challenges faced by restaurant managers.
 
 - As a **member of a family that recently started a restaurant**, I have firsthand experience with the challenges of managing daily operations.
-- Tasks like **taking orders, creating bills, managing inventory, and ensuring customer satisfaction** can be overwhelming.
+- Tasks such as **taking orders, creating bills, managing inventory, and ensuring customer satisfaction** can be overwhelming.
 - The Restaurant Management System - Samrudhi was developed to address these challenges.
 - It aims to **streamline operations, reduce manual errors, and enhance the dining experience**, providing a practical solution to real-world problems faced by my family and other restaurant owners.
 
-## Why Not Use an Existing Solution?
+## Why Not Use an Existing Solution? ❓
 
 - Existing solutions are **expensive** and **complex**, making them unsuitable for my needs.
 - They do not offer the **customization** and **flexibility** required to meet the unique needs of my family's restaurant.
 
-## Installation
+## Important Note ⚠️
+
+> This project is intended to be free to use for any restaurant owner who wants to try restaurant management software but is deterred by the high costs of such simple CRUD applications.
+
+> If you are a software developer, please use this software ethically and do not exploit new restaurant owners who are looking to digitalize their restaurant management.
+
+## Installation 🛠️
 
 ### Windows
 
@@ -25,7 +32,7 @@ Managing a restaurant involves juggling multiple tasks, from taking orders to cr
 3. Unzip the folder.
 4. Double-click on the file named `restaurant-management-samrudhi Setup 0.0.0`.
 
-## Quick Start
+## Quick Start 🚀
 
 1. Clone the repository:
    ```sh
@@ -40,14 +47,14 @@ Managing a restaurant involves juggling multiple tasks, from taking orders to cr
    pnpm run dev
    ```
 
-## Usage
+## Usage 📖
 
 - **Development**: Run `pnpm run dev` to start the development server.
 - **Build**: Use the following commands to build the application for different operating systems.
 
-### Building for Different Operating Systems
+### Building for Different Operating Systems 🖥️
 
-#### macOS
+#### macOS 🍏
 
 To build the application for macOS, run the following command:
 
@@ -55,7 +62,7 @@ To build the application for macOS, run the following command:
 pnpm dist:mac
 ```
 
-#### Windows
+#### Windows 🪟
 
 To build the application for Windows, run the following command:
 
@@ -63,7 +70,7 @@ To build the application for Windows, run the following command:
 pnpm dist:win
 ```
 
-#### Linux
+#### Linux 🐧
 
 To build the application for Linux, run the following command:
 
@@ -73,6 +80,6 @@ pnpm dist:linux
 
 - **Lint**: Run `pnpm run lint` to lint the codebase.
 
-## Contributing
+## Contributing 🤝
 
 Contributions are welcome! Please fork the repository and submit a pull request.
