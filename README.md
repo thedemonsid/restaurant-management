@@ -22,6 +22,12 @@ Managing a restaurant involves juggling multiple tasks, from taking orders to cr
 
 > If you are a software developer, please use this software ethically and do not exploit new restaurant owners who are looking to digitalize their restaurant management. I personally come from the same background and understand the challenges they face.
 
+## Video Overview 🎥
+
+Watch the video below for a quick overview of the Restaurant Management System - Samrudhi:
+
+[![Watch the video](https://img.youtube.com/vi/FU4haVydjFc/0.jpg)](https://www.youtube.com/watch?v=FU4haVydjFc&ab_channel=SiddheshShrirame)
+
 ## Installation 🛠️
 
 ### Windows
