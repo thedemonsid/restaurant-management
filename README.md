@@ -20,7 +20,7 @@ Managing a restaurant involves juggling multiple tasks, from taking orders to cr
 
 > This project is intended to be free to use for any restaurant owner who wants to try restaurant management software but is deterred by the high costs of such simple CRUD applications.
 
-> If you are a software developer, please use this software ethically and do not exploit new restaurant owners who are looking to digitalize their restaurant management.
+> If you are a software developer, please use this software ethically and do not exploit new restaurant owners who are looking to digitalize their restaurant management. I personally come from the same background and understand the challenges they face.
 
 ## Installation 🛠️
 
