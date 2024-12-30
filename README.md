@@ -26,17 +26,17 @@ Managing a restaurant involves juggling multiple tasks, from taking orders to cr
 
 ### Windows
 
-1. Download the necessary files from the following Google Drive link:
-   [Download from Google Drive](https://drive.google.com/your-google-drive-link)
+1. Download `the file named dist.zip from windows folder` from the following Google Drive link:
+   [Download from Google Drive](https://drive.google.com/drive/folders/1C548r6TM9QMPQnuB514jaOemLiB4gfWo?usp=sharing)
 2. Extract the downloaded files to your desired location.
-3. Unzip the folder.
+3. Unzip the `dist.zip`.
 4. Double-click on the file named `restaurant-management-samrudhi Setup 0.0.0`.
 
 ## Quick Start 🚀
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/restaurant-management-samrudhi.git
+   git clone https://github.com/thedemonsid/restaurant-management.git
    ```
 2. Install dependencies:
    ```sh
