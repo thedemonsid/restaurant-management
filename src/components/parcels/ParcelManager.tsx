@@ -6,6 +6,7 @@ import { Search, Plus } from "lucide-react";
 import { Parcel, MenuItem } from "@/types/index";
 import OrderSummary from "@/components/parcels/OrderSummary";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 interface ParcelManagerProps {
   parcel: Parcel;
@@ -22,7 +23,7 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const highlightedItemRef = useRef<HTMLDivElement>(null);
-
+  const toast = useToast();
   useEffect(() => {
     if (highlightedItemRef.current) {
       highlightedItemRef.current.scrollIntoView({
@@ -62,12 +63,25 @@ const ParcelManager: React.FC<ParcelManagerProps> = ({
         quantity: orderItem.quantity,
       }))
     );
-    alert(`Order submitted successfully! ${createdOrder}`);
-    const updatedParcels = parcels.filter(
-      (t) => t.recipient !== parcel.recipient
-    );
+    //@ts-ignore
+    if (createdOrder) {
+      const updatedParcels = parcels.filter(
+        (t) => t.recipient !== parcel.recipient
+      );
 
-    setParcels(updatedParcels);
+      setParcels(updatedParcels);
+      toast.toast({
+        title: "Order submitted successfully",
+        description: `Order: ${JSON.stringify(parcel.recipient)}`,
+        className: "bg-green-100",
+      });
+    } else {
+      toast.toast({
+        title: "Order submission failed",
+        description: `Order: ${JSON.stringify(parcel.recipient)}`,
+        variant: "destructive",
+      });
+    }
     // setSelectedParcel(null);
   };
 

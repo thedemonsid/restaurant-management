@@ -13,12 +13,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 const Menu = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [newItem, setNewItem] = useState({ name: "", price: "" });
   const [filteredItems, setFilteredItems] = useState<MenuItem[]>([]);
   const [name, setName] = useState("");
   const [price, setPrice] = useState(1);
+  const toast = useToast();
   useEffect(() => {
     async function fetchMenuItems() {
       const items = await window.restaurant.menu.getItems();
@@ -52,10 +54,24 @@ const Menu = () => {
   const handleAddItem = async (e: React.FormEvent) => {
     e.preventDefault();
     const item = { name: newItem.name, price: parseFloat(newItem.price) };
-    const addedItem = await window.restaurant.menu.addItem(item);
-    //@ts-ignore
-    setMenuItems([...menuItems, addedItem]);
-    setNewItem({ name: "", price: "" });
+
+    try {
+      const addedItem = await window.restaurant.menu.addItem(item);
+      //@ts-ignore
+      setMenuItems([...menuItems, addedItem]);
+      setNewItem({ name: "", price: "" });
+      toast.toast({
+        title: "Menu item added successfully",
+        description: `Added ${item.name} to the menu`,
+        className: "bg-green-100",
+      });
+    } catch (error) {
+      toast.toast({
+        title: "Failed to add menu item",
+        description: "Please try again",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleUpdateItem = async (id: number, name: string, price: number) => {
@@ -71,9 +87,18 @@ const Menu = () => {
         return item;
       });
       setMenuItems(updatedItems);
-      alert(`Menu item updated successfully: ${JSON.stringify(updatedItem)}`);
+      toast.toast({
+        title: "Menu item updated successfully",
+        description: `Updated ${name} in the menu`,
+        className: "bg-green-100",
+      });
     } catch (error) {
       console.error("Failed to update menu item:", error);
+      toast.toast({
+        title: "Failed to update menu item",
+        description: "Please try again",
+        variant: "destructive",
+      });
     }
   };
 
@@ -189,7 +214,7 @@ const Menu = () => {
                                 name.trim() === item.name &&
                                 price === item.price
                               ) {
-                                alert("No changes made to the menu item");
+                                // alert("No changes made to the menu item");
                                 return;
                               }
                               if (name !== "" && price > 0) {
@@ -197,7 +222,8 @@ const Menu = () => {
                               }
                             }}
                             disabled={
-                              name.trim() === item.name.trim() && price === item.price
+                              name.trim() === item.name.trim() &&
+                              price === item.price
                             }
                           >
                             Save changes

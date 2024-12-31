@@ -35,17 +35,18 @@ export function addOrder(
         });
       });
     } catch (error) {
-      if (error) {
-        console.error("Error while adding order, ", error);
-        // Handle the error, e.g., by notifying the user or logging it
-      } else {
-        throw error;
-      }
+      console.error("Error while adding order: ", error);
+      return false;
     }
   });
 
-  transaction();
-  return true;
+  try {
+    transaction();
+    return true;
+  } catch (error) {
+    console.error("Transaction failed: ", error);
+    return false;
+  }
 }
 
 export function getOrders(db: DatabaseType) {

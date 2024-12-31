@@ -14,7 +14,7 @@ import { Search, Plus } from "lucide-react";
 import { Table, MenuItem } from "@/types/index";
 import OrderSummary from "@/components/tables/OrderSummary";
 import { cn } from "@/lib/utils";
-
+import { useToast } from "@/hooks/use-toast";
 interface TableManagerProps {
   table: Table;
   tables: Table[];
@@ -30,6 +30,7 @@ const TableManager: React.FC<TableManagerProps> = ({
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const highlightedItemRef = useRef<HTMLDivElement>(null);
+  const toast = useToast();
   useEffect(() => {
     if (highlightedItemRef.current) {
       highlightedItemRef.current.scrollIntoView({
@@ -76,14 +77,26 @@ const TableManager: React.FC<TableManagerProps> = ({
         quantity: orderItem.quantity,
       }))
     );
-    alert(`Order submitted successfully! ${createdOrder}`);
-    const updatedTables = tables.map((t) =>
-      t.name === table.name
-        ? { ...t, order: [], status: "available" as Table["status"] }
-        : t
-    );
+    if (createdOrder) {
+      toast.toast({
+        title: "Order submitted successfully",
+        description: `Order submitted successfully for table ${table.name} by ${paymentMethod}`,
+        className: "bg-green-100",
+      });
+      const updatedTables = tables.map((t) =>
+        t.name === table.name
+          ? { ...t, order: [], status: "available" as Table["status"] }
+          : t
+      );
 
-    setTables(updatedTables);
+      setTables(updatedTables);
+    } else {
+      toast.toast({
+        title: "Order submission failed",
+        description: "Failed to submit order. Please try again",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleAddItem = (item: MenuItem) => {

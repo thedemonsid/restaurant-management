@@ -7,7 +7,7 @@ interface Window {
       updateMenuItem: (item: any) => Promise<void>;
     };
     order: {
-      addOrder: (order: any, orderedItems: any) => Promise<void>;
+      addOrder: (order: any, orderedItems: any) => Promise<boolean>;
       getOrders: () => Promise<any>;
       getOrderItems: (orderId: number) => Promise<any>;
       printReceipt: (data: any) => void;
@@ -24,7 +24,7 @@ interface Window {
       addExpense: (expense: any) => Promise<void>;
       getExpenses: () => Promise<any>;
       deleteExpense: (id: number) => Promise<void>;
-      updateExpense: (expense: any) => Promise<void>;
+      updateExpense: (expense: any) => Promise<any>;
       getExpensesByDate: (date: string) => Promise<any>;
       getExpensesForFullDay: (date: string) => Promise<any>;
       getMonthlyExpenses: (year: number, month: number) => Promise<any>;

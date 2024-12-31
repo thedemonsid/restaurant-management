@@ -22,7 +22,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
+import { useToast } from "@/hooks/use-toast";
 const ExpensesManager = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [newExpense, setNewExpense] = useState({
@@ -34,7 +34,7 @@ const ExpensesManager = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(1);
   const [doneBy, setDoneBy] = useState("");
-
+  const toast = useToast();
   useEffect(() => {
     async function fetchExpenses() {
       const items = await window.restaurant.expenses.getExpensesForFullDay(
@@ -57,10 +57,24 @@ const ExpensesManager = () => {
       price: parseFloat(newExpense.price),
       doneBy: newExpense.doneBy,
     };
-    const addedExpense = await window.restaurant.expenses.addExpense(expense);
-    //@ts-ignore
-    setExpenses([...expenses, addedExpense]);
-    setNewExpense({ name: "", price: "", doneBy: "" });
+    try {
+      const addedExpense = await window.restaurant.expenses.addExpense(expense);
+      toast.toast({
+        title: "Expense added",
+        description: `Expense ${expense.name} added successfully`,
+        className: "bg-green-100",
+      });
+      //@ts-ignore
+      setExpenses([...expenses, addedExpense]);
+      setNewExpense({ name: "", price: "", doneBy: "" });
+    } catch (error) {
+      console.error("Failed to add expense:", error);
+      toast.toast({
+        title: "Failed to add expense",
+        description: `Failed to add expense ${expense.name}`,
+        variant: "destructive",
+      });
+    }
   };
 
   const handleUpdateExpense = async (
@@ -92,9 +106,18 @@ const ExpensesManager = () => {
       });
       //@ts-ignore
       setExpenses(updatedItems);
-      alert(`Expense updated successfully: ${JSON.stringify(updatedExpense)}`);
+      toast.toast({
+        title: "Expense updated",
+        description: `Expense ${name} updated successfully`,
+        className: "bg-green-100",
+      });
     } catch (error) {
       console.error("Failed to update expense:", error);
+      toast.toast({
+        title: "Failed to update expense",
+        description: `Failed to update expense ${name}`,
+        variant: "destructive",
+      });
     }
   };
   console.log(new Date().toLocaleString());
@@ -337,7 +360,7 @@ const ExpensesManager = () => {
                                   price === item.price &&
                                   doneBy.trim() === item.doneBy
                                 ) {
-                                  alert("No changes made to the expense");
+                                  // alert("No changes made to the expense");
                                   return;
                                 }
                                 if (name !== "" && price > 0 && doneBy !== "") {
