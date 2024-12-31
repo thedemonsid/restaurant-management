@@ -11,6 +11,14 @@ import {
 } from "@/components/ui/popover";
 
 import { format } from "date-fns";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
+
 const CardComponent = ({
   title,
   value,
@@ -37,20 +45,21 @@ const SelectComponent = ({
 }: {
   label: string;
   options: { value: string; label: string }[];
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onChange: (value: string) => void;
 }) => (
   <div className="flex flex-col">
-    <select
-      className="p-2 border border-gray-300 rounded-md"
-      onChange={onChange}
-    >
-      <option value="">Select {label.toLowerCase()}</option>
-      {options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
+    <Select onValueChange={onChange}>
+      <SelectTrigger className="p-2 border border-gray-300 rounded-md">
+        <SelectValue placeholder={`Select ${label.toLowerCase()}`} />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   </div>
 );
 
@@ -224,14 +233,14 @@ const Dashboard = () => {
           <SelectComponent
             label="Month"
             options={monthOptions}
-            onChange={(e) =>
-              setSelectedMonth(parseInt(e.target.value.split("-")[1]))
+            onChange={(value) =>
+              setSelectedMonth(parseInt(value.split("-")[1]))
             }
           />
           <SelectComponent
             label="Year"
             options={yearOptions}
-            onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+            onChange={(value) => setSelectedYear(parseInt(value))}
           />
         </div>
         <div className="flex justify-between w-1/2 items-center gap-4">

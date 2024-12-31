@@ -120,7 +120,7 @@ const ExpensesManager = () => {
       });
     }
   };
-  console.log(new Date().toLocaleString());
+  // console.log(new Date().toLocaleString());
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Expenses</h1>
