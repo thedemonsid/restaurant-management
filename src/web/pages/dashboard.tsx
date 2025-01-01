@@ -153,27 +153,6 @@ const Dashboard = () => {
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
       <div className="flex flex-col flex-wrap gap-4">
-        <div className="flex justify-between w-1/2 items-center gap-4">
-          <CardComponent
-            title="Total Revenue"
-            value={`₹${totalRevenue}`}
-            valueClass="text-green-400"
-          />
-          <CardComponent
-            title="Total Expenses"
-            value={`₹${totalExpenses}`}
-            valueClass="text-red-400"
-          />
-          <CardComponent
-            title="Net Profit"
-            value={`₹${totalRevenue - totalExpenses}`}
-            valueClass={
-              totalRevenue - totalExpenses > 0
-                ? "text-green-400"
-                : "text-red-400"
-            }
-          />
-        </div>
         <h1 className="text-2xl font-bold">
           Daily Overview{" "}
           <span className="text-pink-400">{selectedDate.toDateString()}</span>
@@ -259,6 +238,28 @@ const Dashboard = () => {
             value={`₹${selectedMonthlyRevenue - selectedMonthlyExpenses}`}
             valueClass={
               selectedMonthlyRevenue - selectedMonthlyExpenses > 0
+                ? "text-green-400"
+                : "text-red-400"
+            }
+          />
+        </div>
+        <h1 className="text-2xl font-bold">Total Overview From Jan 1 , 2025</h1>
+        <div className="flex justify-between w-1/2 items-center gap-4">
+          <CardComponent
+            title="Total Revenue"
+            value={`₹${totalRevenue}`}
+            valueClass="text-green-400"
+          />
+          <CardComponent
+            title="Total Expenses"
+            value={`₹${totalExpenses}`}
+            valueClass="text-red-400"
+          />
+          <CardComponent
+            title="Net Profit"
+            value={`₹${totalRevenue - totalExpenses}`}
+            valueClass={
+              totalRevenue - totalExpenses > 0
                 ? "text-green-400"
                 : "text-red-400"
             }
