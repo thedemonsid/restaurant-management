@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import RestaurantDB from "./database/index.js";
 import { Order } from "./database/types.js";
-import { printReceipt } from "./printer/printer.js";
+import { printKitchenReceipt, printReceipt } from "./printer/printer.js";
 
 ipcMain.handle("menu:add-item", async (event, item) => {
   try {
@@ -115,7 +115,17 @@ ipcMain.handle("order:print-receipt", async (event, data) => {
     return { success: false, error: error.message };
   }
 });
-
+ipcMain.handle("order:print-kitchen-receipt", async (event, data) => {
+  try {
+    const restaurantInfo = await RestaurantDB.getRestaurantInfo();
+    await printKitchenReceipt(data);
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to print receipt:", error);
+    //@ts-ignore
+    return { success: false, error: error.message };
+  }
+});
 // * Expenses
 ipcMain.handle("expense:add-expense", async (event, expense) => {
   try {

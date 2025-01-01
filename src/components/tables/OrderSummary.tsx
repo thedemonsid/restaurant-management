@@ -61,6 +61,19 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
     };
     window.restaurant.order.printReceipt(receiptData);
   };
+  const handleKitchenReceipt = () => {
+    const receiptData = {
+      orderId: Math.floor(Math.random() * 1000000),
+      date: new Date().toLocaleString(),
+      items: order.map((orderItem) => ({
+        name: orderItem.menuItem.name,
+        quantity: orderItem.quantity,
+        price: orderItem.menuItem.price,
+      })),
+      total: totalOrderPrice,
+    };
+    window.restaurant.order.printKitchenReceipt(receiptData);
+  };
   const handlePrintAndSaveOrder = () => {
     console.log("Order printed and saved");
     handlePrintOrder();
@@ -69,7 +82,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   return (
     <div className="mt-4">
       <h4 className="font-medium">Current Order</h4>
-      <section className="max-h-48 overflow-y-auto">
+      <section className="max-h-72 overflow-y-auto">
         {" "}
         {order.map((orderItem) => (
           <div
@@ -99,89 +112,97 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
         ))}
       </section>
       <div className="font-bold mt-2">Total: ${totalOrderPrice.toFixed(2)}</div>
-      <Dialog>
-        <DialogTrigger>
-          <Button className="mt-4">Submit Order</Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader className="flex justify-between gap-4 flex-col">
-            <DialogTitle>Order Summary</DialogTitle>
-            <div className="font-bold">
-              Table{" "}
-              <span className="text-md bg-green-100 text-red-600 p-2 rounded-md">
-                {tableName}
-              </span>
-            </div>
-            <div className="space-y-2">
-              {/* order summary in print format */}
-              {order.map((orderItem) => (
-                <div
-                  key={orderItem.menuItem.id}
-                  className="flex justify-between items-center py-1"
-                >
-                  <span>
-                    {orderItem.menuItem.name} (x{orderItem.quantity})
-                  </span>
-                  <span>
-                    ₹
-                    {(orderItem.menuItem.price * orderItem.quantity).toFixed(2)}
-                  </span>
-                </div>
-              ))}
-              <div className="font-bold mt-2">
-                Total:{" "}
-                <span className="text-green-500 text-xl">
-                  ₹{totalOrderPrice.toFixed(2)}
+      <div className="flex justify-between">
+        {" "}
+        <Dialog>
+          <DialogTrigger>
+            <Button className="mt-4">Submit Order</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader className="flex justify-between gap-4 flex-col">
+              <DialogTitle>Order Summary</DialogTitle>
+              <div className="font-bold">
+                Table{" "}
+                <span className="text-md bg-green-100 text-red-600 p-2 rounded-md">
+                  {tableName}
                 </span>
               </div>
-            </div>
-          </DialogHeader>
-          <DialogTitle>Payment Method</DialogTitle>
-          <Select
-            defaultValue={paymentMethod}
-            onValueChange={(value) => setPaymentMethod(value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select payment method" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="cash">Cash</SelectItem>
-              <SelectItem value="online">UPI / Online</SelectItem>
-              <SelectItem value="srs">Shreyash Shrirame</SelectItem>
-              <SelectItem value="dcs">Damaji Shrirame</SelectItem>
-            </SelectContent>
-          </Select>
-          <DialogFooter>
-            <DialogClose>
-              <Button
-                onClick={handleSaveOrder}
-                type="submit"
-                disabled={!paymentMethod.length}
-              >
-                Save Order
-              </Button>
-            </DialogClose>
-            <DialogClose>
-              <Button
-                onClick={handlePrintAndSaveOrder}
-                type="submit"
-                disabled={!paymentMethod.length}
-              >
-                Print & Save Order
-              </Button>
-            </DialogClose>
-            <DialogClose>
-              <Button
-                onClick={handlePrintOrder}
-                type="submit"
-                // disabled={!paymentMethod.length}
-              >
-                Print Order
-              </Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+              <div className="space-y-2">
+                {/* order summary in print format */}
+                {order.map((orderItem) => (
+                  <div
+                    key={orderItem.menuItem.id}
+                    className="flex justify-between items-center py-1"
+                  >
+                    <span>
+                      {orderItem.menuItem.name} (x{orderItem.quantity})
+                    </span>
+                    <span>
+                      ₹
+                      {(orderItem.menuItem.price * orderItem.quantity).toFixed(
+                        2
+                      )}
+                    </span>
+                  </div>
+                ))}
+                <div className="font-bold mt-2">
+                  Total:{" "}
+                  <span className="text-green-500 text-xl">
+                    ₹{totalOrderPrice.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+            </DialogHeader>
+            <DialogTitle>Payment Method</DialogTitle>
+            <Select
+              defaultValue={paymentMethod}
+              onValueChange={(value) => setPaymentMethod(value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select payment method" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="cash">Cash</SelectItem>
+                <SelectItem value="online">UPI / Online</SelectItem>
+                <SelectItem value="srs">Shreyash Shrirame</SelectItem>
+                <SelectItem value="dcs">Damaji Shrirame</SelectItem>
+              </SelectContent>
+            </Select>
+            <DialogFooter>
+              <DialogClose>
+                <Button
+                  onClick={handleSaveOrder}
+                  type="submit"
+                  disabled={!paymentMethod.length}
+                >
+                  Save Order
+                </Button>
+              </DialogClose>
+              <DialogClose>
+                <Button
+                  onClick={handlePrintAndSaveOrder}
+                  type="submit"
+                  disabled={!paymentMethod.length}
+                >
+                  Print & Save Order
+                </Button>
+              </DialogClose>
+              <DialogClose>
+                <Button
+                  onClick={handlePrintOrder}
+                  type="submit"
+                  // disabled={!paymentMethod.length}
+                >
+                  Print Order
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        <Button className="mt-4" onClick={handleKitchenReceipt} variant={"outline"}>
+          Generate QT
+        </Button>
+      </div>
     </div>
   );
 };

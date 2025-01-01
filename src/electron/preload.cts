@@ -26,6 +26,8 @@ contextBridge.exposeInMainWorld("restaurant", {
       ipcRenderer.invoke("order:get-order-items", orderId),
     printReceipt: (data: any) =>
       ipcRenderer.invoke("order:print-receipt", data),
+    printKitchenReceipt: (data: any) =>
+      ipcRenderer.invoke("order:print-kitchen-receipt", data),
   },
   revenue: {
     getMonthlyRevenue: (year: number, month: number): Promise<any> =>
@@ -54,7 +56,7 @@ contextBridge.exposeInMainWorld("restaurant", {
     updateRestaurantInfo: (info: any) =>
       ipcRenderer.invoke("restaurant:update-info", info),
   },
-  db:{
+  db: {
     clearData: (): Promise<boolean> => ipcRenderer.invoke("db:clear-all-data"),
-  }
+  },
 });

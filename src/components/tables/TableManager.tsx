@@ -237,13 +237,14 @@ const TableManager: React.FC<TableManagerProps> = ({
             <div
               key={item.id}
               className={cn(
-                "flex justify-between items-center py-2",
+                "flex justify-between items-center py-2 cursor-pointer",
                 // item.id can be any number so we cant gurantee it will match with highlightedIndex
                 highlightedIndex === filteredMenuItems.indexOf(item)
-                  ? "bg-green-100 rounded-sm px-2"
+                  ? "bg-green-200 rounded-sm px-2"
                   : ""
               )}
               ref={index === highlightedIndex ? highlightedItemRef : null}
+              onClick={() => handleAddItem(item)}
             >
               <span>
                 {item.name} - ${item.price.toFixed(2)}

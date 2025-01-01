@@ -11,6 +11,7 @@ interface Window {
       getOrders: () => Promise<any>;
       getOrderItems: (orderId: number) => Promise<any>;
       printReceipt: (data: any) => void;
+      printKitchenReceipt: (data: any) => void;
     };
     revenue: {
       getMonthlyRevenue: (year: number, month: number) => Promise<any>;
