@@ -137,6 +137,20 @@ class RestaurantDB {
     );
     return response;
   }
+  //! Clear all data
+  public clearData() {
+    try {
+      this.db.exec("DELETE FROM MenuItem");
+      this.db.exec("DELETE FROM Expenses");
+      this.db.exec("DELETE FROM 'Order'");
+      this.db.exec("DELETE FROM OrderMenuItem");
+      return true;
+    } catch (error) {
+      console.error("Failed to clear data:", error);
+      return false;
+    }
+  }
+
   //! Close the database connection
   public close(): void {
     this.db.close();

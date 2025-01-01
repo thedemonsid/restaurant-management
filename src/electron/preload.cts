@@ -54,4 +54,7 @@ contextBridge.exposeInMainWorld("restaurant", {
     updateRestaurantInfo: (info: any) =>
       ipcRenderer.invoke("restaurant:update-info", info),
   },
+  db:{
+    clearData: (): Promise<boolean> => ipcRenderer.invoke("db:clear-all-data"),
+  }
 });

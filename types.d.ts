@@ -41,5 +41,8 @@ interface Window {
         phone: string[];
       }) => Promise<boolean>;
     };
+    db: {
+      clearData: () => Promise<boolean>;
+    };
   };
 }

@@ -183,3 +183,13 @@ ipcMain.handle("restaurant:update-info", async (event, info) => {
     throw error;
   }
 });
+
+//! Clear all the Data
+ipcMain.handle("db:clear-all-data", async () => {
+  try {
+    return await RestaurantDB.clearData();
+  } catch (error) {
+    console.error("Failed to clear all data:", error);
+    throw error;
+  }
+});
